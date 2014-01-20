@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>@ViewBag.Title - 软件学院</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        <link href="/Content/site.css" rel="stylesheet"/>
+        <script src="/Scripts/modernizr-2.6.2.js"></script>
+    </head>
+    <body>
+        <header>
+            <div class="content-wrapper" style="font-family:Microsoft YaHei">
+                <div class="float-left">
+                    <p class="site-title" style="font-family:Microsoft YaHei">@Html.ActionLink("主页", "Index", "Home")</p>
+                </div>
+                <div class="float-right">
+                    <section id="login">
+                        @Html.Partial("_LoginPartial")
+                    </section>
+                </div>
+            </div>
+        </header>
+        <div id="body">
+            @RenderSection("featured", required: false)
+            <section class="content-wrapper main-content clear-fix">
+                @RenderBody()
+            </section>
+        </div>
+        <footer>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p>推荐使用 Google Chrome 28+、Mozilla Firefox 22+ 或者 Internet Explorer 10+。本系统可能不兼容低版本浏览器。请不要使用360系列浏览器。</p>
+                    <p>&copy; @DateTime.Now.Year - 上海交通大学软件学院</p>
+                    <p>&copy; @DateTime.Now.Year - School of Software, Shanghai Jiao Tong University.</p>
+                </div>
+            </div>
+        </footer>
+
+        <script src="/Scripts/jquery-1.8.2.js"></script>
+        @RenderSection("scripts", required: false)
+    </body>
+</html>

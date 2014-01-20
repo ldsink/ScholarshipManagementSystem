@@ -1,0 +1,31 @@
+﻿@model ScholarshipManagementSystem.Models.LoginModel
+@{
+    ViewBag.Title = "登录";
+}
+
+<hgroup class="title">
+    <h1>@ViewBag.Title.</h1>
+</hgroup>
+
+<div id="loginForm">
+@using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl })) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <link rel=stylesheet type="text/css" href="../Content/Login.css">
+    <div>
+        @Html.LabelFor(m => m.UserName)
+        @Html.TextBoxFor(m => m.UserName)
+        @Html.ValidationMessageFor(m => m.UserName)
+    </div>
+    <div>
+        @Html.LabelFor(m => m.Password)
+        @Html.PasswordFor(m => m.Password)
+        @Html.ValidationMessageFor(m => m.Password)
+    </div>
+    <div>
+        @Html.CheckBoxFor(m => m.RememberMe) 记住我。
+        <input class="loginButton" type="submit" value="    登录    "/>
+    </div>
+}
+</div>

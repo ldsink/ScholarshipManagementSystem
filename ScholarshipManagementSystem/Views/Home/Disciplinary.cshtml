@@ -1,0 +1,132 @@
+﻿@model ScholarshipManagementSystem.Models.PunishmentDTO
+
+@{
+    ViewBag.Title = "违纪情况管理";
+}
+
+
+@section Scripts {
+    <script type="text/javascript" src="/Scripts/jquery-1.8.2.js"></script>
+    <script type="text/javascript" src="/Scripts/AjaxFileUploader/ajaxfileupload.js"></script>
+     
+    <script type="text/javascript" src="/Scripts/jqGrid/js/i18n/grid.locale-cn.js"></script>
+    <script type="text/javascript" src="/Scripts/jqGrid/js/jquery.jqGrid.min.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="/Scripts/jqGrid/css/ui.jqgrid.css" />
+    <link rel="stylesheet" type="text/css" href="/Scripts/jqGrid/css/start/jquery-ui-1.10.3.custom.css" />
+    <script type="text/javascript" src="/Scripts/jBox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/Scripts/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+    <link type="text/css" rel="stylesheet" href="/Scripts/jBox/Skins2/Yellow/jbox.css"/>
+    
+    <script type="text/javascript">
+
+        $("#disciplinary_t").jqGrid({
+            caption: '违纪情况',
+            url: '../api/Disciplinary',
+            datatype: "json",
+            mtype: 'GET',
+            colNames: ['Id', '姓名', '班级', '学号', '违纪类型', '时间', '描述', '评选资格'],
+            colModel: [
+                { name: 'Id', index: 'Id', width: 1, align: "center", sortable: false, hidden: true },
+                { name: 'Name', index: 'Name', width: 60, align: "center", sortable: false },
+                { name: 'Class', index: 'Class', width: 80, align: "center", sortable: false },
+                { name: 'SId', index: 'SId', width: 100, align: "center", sortable: false },
+                { name: 'Type', index: 'Type', width: 100, align: "center", sortable: false },
+                { name: 'Date', index: 'Date', width: 100, align: "center", sortable: false },
+                { name: 'Notes', index: 'Notes', width: 100, align: "center", sortable: false },
+                {
+                    name: 'Qualification', index: 'Qualification', width: 50, align: "center", sortable: false,
+                    formatter:function(cellvalue, options, rowObject) {
+                        if(cellvalue == true) return "是";
+                        else return "否";}
+                },
+            ],
+            autowidth: true,
+            height: 1000,
+            rowNum: -1, // Set this parameter to -1 (unlimited) to disable this checking.
+            scroll: true,
+            sortname: 'Id',
+            sortorder: "desc",
+            jsonReader: {
+                root: "griddata",
+                total: "totalpages",
+                page: "currpage",
+                records: "totalrecords",
+                repeatitems: false
+            },
+            altclass: 'altRowsColour',
+            ondblClickRow: function (id) {
+                var data = $("#disciplinary_t").jqGrid('getRowData', id);
+                var url = "DisciplinaryModify/" + data.Id; //转向网页的地址;
+                var name = "编辑违纪记录";        //网页名称，可为空;
+                var iWidth = 400;   //弹出窗口的宽度;
+                var iHeight = 400;  //弹出窗口的高度;
+                var iTop = (window.screen.availHeight - 30 - iHeight) / 2;  //获得窗口的垂直位置;
+                var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;   //获得窗口的水平位置;
+                window.open(url, name, 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no');
+            }
+        });
+
+        $("#search_btn").click(function () {
+            $("#disciplinary_t").jqGrid('setGridParam', {
+                url: '../api/Disciplinary/?name=' + $("#name").val() +
+                    '&classs=' + $("#class").val() + 
+                    '&sid=' + $("#sid").val() + 
+                    '&type=' + $("#type").val(),
+                page: 1
+            }).trigger("reloadGrid"); //重新载入 
+        });
+
+        $("#new_btn").click(function () {
+            var url = "DisciplinaryDialog"; //转向网页的地址;
+            var name = "新增违纪记录";        //网页名称，可为空;
+            var iWidth = 400;   //弹出窗口的宽度;
+            var iHeight = 400;  //弹出窗口的高度;
+            var iTop = (window.screen.availHeight - 30 - iHeight) / 2;  //获得窗口的垂直位置;
+            var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;   //获得窗口的水平位置;
+            window.open(url, name, 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no');
+        });
+        
+        $("#export_btn").click(function () {
+            $.jBox.messager('正在准备数据，请稍候……', '提示');
+            $.getJSON("/api/Export/?type=Disciplinary", function (data) {
+                window.location.href = "/App_Export/Disciplinary.xlsx";
+            });
+        });
+    </script>
+}
+
+<h2 style="font-family:Microsoft YaHei;text-align:center">违纪情况管理</h2><br />
+
+<div style="font-family:Microsoft YaHei;text-align:center;width: 1000px">
+    <link rel=stylesheet type="text/css" href="../Content/Scoring.css">
+    <span>&nbsp;姓名：</span>
+    <span>
+        <input id="name" type="text" style="width: 100px" />
+    </span>
+    <span>&nbsp;班级：</span>
+    <span>
+        <input id="class" type="text" style="width: 100px" />
+    </span>
+    <span>&nbsp;学号：</span>
+    <span>
+        <input id="sid" type="text" style="width: 150px" />
+    </span>
+    <span>&nbsp;类型：</span>
+    <span>
+        <input id="type" type="text" style="width: 100px" />
+    </span>
+    <span>
+        <input id="search_btn" class="disciplinaryButton" type="button" value="搜索" />
+    </span>
+    <span>
+        <input id="new_btn" type="button" class="makeDataButton" value="新增" />
+    </span>
+    <span>
+        <input id="export_btn" type="button" class="disciplinaryButton" value="导出全部记录" />
+    </span>
+</div>
+
+<div>
+    <table id="disciplinary_t"></table>
+</div>

@@ -1,0 +1,127 @@
+﻿@{
+    ViewBag.Title = "学生信息";
+}
+
+@section Scripts {
+    <script type="text/javascript" src="/Scripts/jqGrid/js/i18n/grid.locale-cn.js"></script>
+    <script type="text/javascript" src="/Scripts/jqGrid/js/jquery.jqGrid.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/Scripts/jqGrid/css/start/jquery-ui-1.10.3.custom.css" />
+    <link rel="stylesheet" type="text/css" href="/Scripts/jqGrid/css/ui.jqgrid.css" />
+    <script type="text/javascript" src="/Scripts/jBox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/Scripts/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+    <link type="text/css" rel="stylesheet" href="/Scripts/jBox/Skins2/Blue/jbox.css"/>
+
+    <script type="text/javascript">
+        var baseUrl = '/api/ExportForStudentInfo';
+
+        $("#studentinfo_t").jqGrid({
+            caption: '学生信息',
+            datatype: "json",
+            mtype: 'GET',
+            colNames: ['学号', '姓名', '班级', '奖学金申请', '助学金申请', '班级打分提交', '评选资格'],
+            colModel: [
+                { name: 'Id', index: 'Id', width: 100, align: "center", sortable: false },
+                { name: 'Name', index: 'Name', width: 100, align: "center", sortable: false },
+                { name: 'ClassId', index: 'ClassId', width: 100, align: "center", sortable: false },
+                {
+                    name: 'ApplyScholarship', index: 'ApplyScholarship', width: 50, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue == true)
+                            return "是";
+                        else return "否";
+                    }
+                },
+                {
+                    name: 'ApplyGrant', index: 'ApplyGrant', width: 50, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue == true)
+                            return "是";
+                        else return "否";
+                    }
+                },
+                {
+                    name: 'SubmitScoring', index: 'SubmitScoring', width: 50, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue == true)
+                            return "是";
+                        else return "否";
+                    }
+                },
+                {
+                    name: 'Qualification', index: 'Qualification', width: 50, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue == true)
+                            return "是";
+                        else return "否";
+                    }
+                },
+            ],
+            autowidth: true,
+            height: 800,
+            rowNum: -1, // Set this parameter to -1 (unlimited) to disable this checking.
+            scroll: true,
+            sortname: 'NumId',
+            sortorder: "desc",
+            jsonReader: {
+                root: "griddata",
+                total: "totalpages",
+                page: "currpage",
+                records: "totalrecords",
+                repeatitems: false
+            },
+            altclass: 'altRowsColour',
+        });
+
+        $("#find_btn").click(function () {
+            $("#studentinfo_t").jqGrid('setGridParam', {
+                url: baseUrl + '/?Name=' + $("#Name").val() +
+                    '&classId=' + $("#classId").val() +
+                    '&studentId=' + $("#studentId").val(),
+                page: 1,
+            }).trigger("reloadGrid");
+        });
+
+        $("#export_btn").click(function () {
+            $.jBox.tip('正在准备数据，请稍候……', 'info');
+            var exportUrl = baseUrl + '/?method=export' +
+                '&Name=' + $("#Name").val() +
+                '&classId=' + $("#classId").val() +
+                '&studentId=' + $("#studentId").val();
+            $.getJSON(exportUrl, function (data) {
+                $.jBox.tip(data, '提示');
+                window.location.href = "/App_Export/StudentInfoSimple.xlsx";
+            });
+        });
+
+        $("#export_all_btn").click(function () {
+            jBox.tip('正在准备数据，请稍候……', 'info');
+            var baseUri = '@ViewBag.ApiUrl';
+            $.getJSON(baseUri + "/?type=StudentInfo", function (data) {
+                jBox.tip(data, 'info');
+                window.location.href = "/App_Export/StudentInfo.xlsx";
+            });
+        });
+    </script>
+}
+
+<h2 style="font-family:Microsoft YaHei;text-align:center">学生信息</h2><br />
+
+<div>
+    <link rel=stylesheet type="text/css" href="../Content/Scoring.css">     
+    <table style="font-family:Microsoft YaHei;margin: auto;text-align:center">
+        <tr>
+            <td style="width:100px"><h4>姓名</h4></td>
+            <td style="width:100px"><h4>班级</h4></td>
+            <td style="width:120px"><h4>学号</h4></td>
+        </tr>
+        <tr>
+            <td><input id="Name" type="text" style="width:100px" /></td>
+            <td><input id="classId" type="text" style="width:100px" /></td>
+            <td><input id="studentId" type="text" style="width:120px" /></td>
+            <td style="width:50px"><input id="find_btn" type="button" value="查找" class="uploadButton"/></td>
+            <td style="width:50px"><input id="export_btn" type="button" value="导出" class="uploadButton"/></td>
+            <td style="width:100px"><input id="export_all_btn" type="button" value="导出全部" class="uploadButton"/></td>
+        </tr>
+    </table>
+    <table id="studentinfo_t"></table>
+</div>

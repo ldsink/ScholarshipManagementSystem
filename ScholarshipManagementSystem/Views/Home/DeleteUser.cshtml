@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "删除学生帐号";
+}
+
+@section Scripts {
+    <script type="text/javascript" src="/Scripts/jquery-1.8.2.js"></script>
+
+    <script type="text/javascript">
+
+        var baseUri = '@ViewBag.ApiUrl';
+
+        function delete_btn() {
+            var id = $('#sid').val();
+            var sure = confirm("确定删除学号为 " + id + " 的学生的全部信息？（此操作不可恢复）");
+            if (sure) {
+                $.ajax({
+                    type: "DELETE",
+                    url: baseUri + '/' + id,
+                    success: function () { alert("信息删除成功。"); },
+                    error: function () { alert("信息删除失败，请重新尝试。"); },
+                })
+            }
+        }
+    </script>
+}
+
+<h2 style="font-family:Microsoft YaHei;text-align:center">注销学生帐号</h2><br />
+
+<div style="font-family:Microsoft YaHei;text-align:center">
+    <span><b>&nbsp;请输入需要注销的学号：</b></span>
+    <span>
+        <input id="sid" type="text" style="width: 200px" />
+    </span>
+    <span>
+        <b><a style="color:red;" href="javascript:delete_btn()">注销</a></b>
+    </span>
+</div>

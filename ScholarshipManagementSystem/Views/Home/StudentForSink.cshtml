@@ -1,0 +1,158 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+   <meta charset="utf-8" />
+   <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
+   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+   <!-- Mobile viewport optimized: h5bp.com/viewport -->
+   <meta name="viewport" content="width=device-width">
+
+   <title>学生 - 主页</title>
+
+   <link rel="stylesheet" type="text/css" href="../Scripts/BootMetro/css/bootmetro.css">
+   <link rel="stylesheet" type="text/css" href="../Scripts/BootMetro/css/bootmetro-responsive.css">
+   <link rel="stylesheet" type="text/css" href="../Scripts/BootMetro/css/bootmetro-icons.css">
+   <link rel="stylesheet" type="text/css" href="../Scripts/BootMetro/css/bootmetro-ui-light.css">
+   <link rel="stylesheet" type="text/css" href="../Scripts/BootMetro/css/datepicker.css">
+   <script src="../Scripts/BootMetro/js/modernizr-2.6.2.min.js"></script>
+</head>
+
+<body style="font-family:Microsoft YaHei;"><!--background-color:#C7EDCC;-->
+    <div id="wrap">
+        <!-- Header -->
+        <div id="nav-bar" class="">
+         <div class="pull-left">
+            <div id="header-container">
+               <h1 style="font-family:Microsoft YaHei">软件学院奖学金管理系统</h1>
+               <div class="dropdown">
+                  <a class="header-dropdown dropdown-toggle accent-color" data-toggle="dropdown" href="#">
+                     功能列表
+                     <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                      <li>@Html.ActionLink("奖（助）学金申请", "Apply", "Home")</li>
+                      <li>@Html.ActionLink("班级打分", "Scoring", "Home")</li>
+                      <li>@Html.ActionLink("加分项申报", "Bonus", "Home")</li>
+                  </ul>
+            </div>
+            </div>
+         </div>
+         <div class="pull-right">
+            <div id="top-info" class="pull-right"> 
+                欢迎使用 , @Html.ActionLink(User.Identity.Name, "Manage", "Account", routeValues: null, htmlAttributes: new { @class = "username", title = "Manage" })。
+                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" })) {
+                    @Html.AntiForgeryToken()
+                    <a href="javascript:document.getElementById('logoutForm').submit()">退出系统</a>
+                }
+            </div>
+         </div>
+      </div>
+   
+        <!-- Body -->
+        <div class="metro panorama">
+            <div class="panorama-sections">
+                <div class="panorama-section">
+                    <h2>　</h2>
+                    <div class="tile-column-span-2">
+                        <a class="tile widepeek" href="Apply">
+                            <div class="tile wide image">
+                                <img src="../Content/Apply.jpg" alt=""/>
+                            </div>
+                            <div class="tile wide text">
+                                <div class="text-header">奖(助)学金申请</div>
+                                <div class="text-header"></div>
+                                <div class="text4">自主申请奖学金、助学金。默认均为不申请，想要申请奖、助学金请先来此处提交申请意向。</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="panorama-section">
+                    <h2>　</h2>
+                    <div class="tile-column-span-2">
+                        <a class="tile widepeek bg-color-orange" href="Scoring">
+                            <div class="tile wide image">
+                                <img src="../Content/Scoring.jpg" alt=""/>
+                            </div>
+                            <div class="tile wide text bg-color-orange">
+                                <div class="text-header">班级打分</div>
+                                <div class="text4">班级内部互相打分.</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="panorama-section">
+                    <h2>　</h2>
+                    <div class="tile-column-span-2">
+                        <a class="tile widepeek bg-color-gray" href="Bonus">
+                            <div class="tile wide image">
+                                <img src="../Content/Bonus.jpg" alt=""/>
+                            </div>
+                            <div class="tile wide text bg-color-gray">
+                                <div class="text-header">加分项申报</div>
+                                <div class="text4">提交、查看自己的加分项情况.</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="panorama-section">
+                    <h2>　</h2>
+                    <div class="tile-column-span-2">
+                        <a class="tile widepeek bg-color-red" href="BonusList">
+                            <div class="tile wide image">
+                                <img src="../Content/BonusList.jpeg" alt=""/>
+                            </div>
+                            <div class="tile wide text bg-color-red">
+                                <div class="text-header">奖励项目列表</div>
+                                <div class="text4">查看软件学院学生综合测评奖励项目，</div>
+                                <div class="text4">寻找属于自己的加分项.</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <a id="panorama-scroll-prev" href="#"></a>
+    <a id="panorama-scroll-next" href="#"></a>
+    <div id="panorama-scroll-prev-bkg"></div>
+    <div id="panorama-scroll-next-bkg"></div>
+   </div>
+
+    <div style="font-family:Microsoft YaHei;text-align:center">
+        <div>
+            <p>推荐使用 Google Chrome 或者 Mozilla Firefox 浏览器。请不要使用360系列浏览器。</p>
+            <h4>&copy; @DateTime.Now.Year - 上海交通大学软件学院</h4>
+            <h4>&copy; @DateTime.Now.Year - School of Software, Shanghai Jiao Tong University.</h4>
+        </div>
+    </div>
+
+   <!-- Grab Google CDN's jQuery. fall back to local if necessary -->
+   <script src="//code.jquery.com/jquery-1.10.0.min.js"></script>
+   <script>window.jQuery || document.write("<script src='../Scripts/BootMetro/js/jquery-1.10.0.min.js'>\x3C/script>")</script>
+
+   <script type="text/javascript" src="../Scripts/BootMetro/js/min/bootstrap.min.js"></script>
+   <script type="text/javascript" src="../Scripts/BootMetro/js/bootmetro-panorama.js"></script>
+   <script type="text/javascript" src="../Scripts/BootMetro/js/bootmetro-pivot.js"></script>
+   <script type="text/javascript" src="../Scripts/BootMetro/js/bootmetro-charms.js"></script>
+   <script type="text/javascript" src="../Scripts/BootMetro/js/bootstrap-datepicker.js"></script>
+
+   <script type="text/javascript" src="../Scripts/BootMetro/js/jquery.mousewheel.min.js"></script>
+   <script type="text/javascript" src="../Scripts/BootMetro/js/jquery.touchSwipe.min.js"></script>
+    
+    <script type="text/javascript">
+       $('.panorama').panorama({
+           showscrollbuttons: true,
+           keyboard: true,
+           parallax: true
+       });
+       $('#pivot').pivot();
+   </script>
+
+</body>
+</html>

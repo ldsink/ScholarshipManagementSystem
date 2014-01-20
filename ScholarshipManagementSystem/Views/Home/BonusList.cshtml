@@ -1,0 +1,203 @@
+﻿@{
+    ViewBag.Title = "奖励项目";
+}
+
+@section Scripts {
+  <script type="text/javascript" src="/Scripts/jqGrid/js/i18n/grid.locale-cn.js"></script>
+  <script type="text/javascript" src="/Scripts/jqGrid/js/jquery.jqGrid.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/Scripts/jqGrid/css/start/jquery-ui-1.10.3.custom.css" />
+  <link rel="stylesheet" type="text/css" href="/Scripts/jqGrid/css/ui.jqgrid.css" />
+
+  <script type="text/javascript" src="~/Scripts/jBox/jquery.jBox-2.3.min.js"></script>
+  <script type="text/javascript" src="~/Scripts/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+  <link type="text/css" rel="stylesheet" href="~/Scripts/jBox/Skins2/Blue/jbox.css"/>
+
+    <script type="text/javascript">
+        $("#bonus_table_normal").jqGrid({
+            caption: '普通加分项目',
+            url: '/api/AnnounceBonusNormal',
+            datatype: "json",
+            mtype: 'GET',
+            colNames: ['Id', '项目类型', '编号', '项目设置', '项目内容', '分值'],
+            colModel: [
+                { name: 'Id', index: 'Id', width: 1, align: "center", sortable: false, hidden: true },
+                { name: 'Type', index: 'Type', width: 80, align: "center", sortable: false },
+                { name: 'Num', index: 'Num', width: 40, align: "center", sortable: false },
+                { name: 'Name', index: 'Name', width: 80, align: "center", sortable: false },
+                { name: 'Content', index: 'Content', width: 200, align: "center", sortable: false },
+                { name: 'Score', index: 'Score', width: 40, align: "center", sortable: false },
+            ],
+            autowidth: true,
+            height: 560,
+            rowNum: -1, // Set this parameter to -1 (unlimited) to disable this checking.
+            scroll: true,
+            sortname: 'Id',
+            sortorder: "desc",
+            jsonReader: {
+                root: "griddata",
+                total: "totalpages",
+                page: "currpage",
+                records: "totalrecords",
+                repeatitems: false
+            },
+            altclass: 'altRowsColour',
+            ondblClickRow: function (id) {
+                var bonus = $("#bonus_table_normal").jqGrid('getRowData', id);
+                var submit = function (v, h, f) {
+                    if (v == 'ok') {
+                        $.post('/api/Bonus', { Num: bonus.Num }, function (num) {
+                            var url = "BonusNormalEdit2/" + num;
+                            var name = "普通加分项编辑";
+                            var iWidth = 400;
+                            var iHeight = 400;
+                            var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+                            var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+                            window.open(url, name, 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no');
+                        });
+                        return true;
+                    }
+                    else if (v == 'cancel')
+                        return true;
+                };
+                $.jBox.confirm("确定申报此条加分项目吗？", "提示", submit);
+            },
+        });
+        
+        $("#bonus_table_competition").jqGrid({
+            caption: '比赛加分项目',
+            url: '/api/AnnounceBonusCompetition',
+            datatype: "json",
+            mtype: 'GET',
+            colNames: ['Id', '项目类型', '编号', '项目设置', '项目内容', '分值'],
+            colModel: [
+                { name: 'Id', index: 'Id', width: 1, align: "center", sortable: false, hidden: true },
+                { name: 'Type', index: 'Type', width: 80, align: "center", sortable: false },
+                { name: 'Num', index: 'Num', width: 40, align: "center", sortable: false },
+                { name: 'Name', index: 'Name', width: 80, align: "center", sortable: false },
+                { name: 'Content', index: 'Content', width: 200, align: "center", sortable: false },
+                { name: 'Score', index: 'Score', width: 40, align: "center", sortable: false },
+            ],
+            autowidth: true,
+            height: 580,
+            rowNum: -1, // Set this parameter to -1 (unlimited) to disable this checking.
+            scroll: true,
+            sortname: 'Id',
+            sortorder: "desc",
+            jsonReader: {
+                root: "griddata",
+                total: "totalpages",
+                page: "currpage",
+                records: "totalrecords",
+                repeatitems: false
+            },
+            altclass: 'altRowsColour',
+            ondblClickRow: function (id) {
+                var bonus = $("#bonus_table_competition").jqGrid('getRowData', id);
+                var submit = function (v, h, f) {
+                    if (v == 'ok') {
+                        $.post('/api/Bonus', { Num: bonus.Num }, function (num) {
+                            var url = "BonusCompetitionEdit2/" + num;
+                            var name = "比赛加分项编辑";
+                            var iWidth = 400;
+                            var iHeight = 500;
+                            var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+                            var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+                            window.open(url, name, 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no');
+                        });
+                        return true;
+                    }
+                    else if (v == 'cancel')
+                        return true;
+                };
+                $.jBox.confirm("确定申报此条加分项目吗？", "提示", submit);
+            },
+        });
+
+        $("#bonus_table_paper").jqGrid({
+            caption: '论文加分项目',
+            url: '/api/AnnounceBonusPaper',
+            datatype: "json",
+            mtype: 'GET',
+            colNames: ['Id', '项目类型', '编号', '项目设置', '项目内容', '分值'],
+            colModel: [
+                { name: 'Id', index: 'Id', width: 1, align: "center", sortable: false, hidden: true },
+                { name: 'Type', index: 'Type', width: 80, align: "center", sortable: false },
+                { name: 'Num', index: 'Num', width: 40, align: "center", sortable: false },
+                { name: 'Name', index: 'Name', width: 80, align: "center", sortable: false },
+                { name: 'Content', index: 'Content', width: 200, align: "center", sortable: false },
+                { name: 'Score', index: 'Score', width: 40, align: "center", sortable: false },
+            ],
+            autowidth: true,
+            height: 360,
+            rowNum: -1, // Set this parameter to -1 (unlimited) to disable this checking.
+            scroll: true,
+            sortname: 'Id',
+            sortorder: "desc",
+            jsonReader: {
+                root: "griddata",
+                total: "totalpages",
+                page: "currpage",
+                records: "totalrecords",
+                repeatitems: false
+            },
+            altclass: 'altRowsColour',
+            ondblClickRow: function (id) {
+                var bonus = $("#bonus_table_paper").jqGrid('getRowData', id);
+                var submit = function (v, h, f) {
+                    if (v == 'ok') {
+                        $.post('/api/Bonus', { Num: bonus.Num }, function (num) {
+                            var url = "BonusPaperEdit2/" + num;
+                            var name = "论文加分项编辑";
+                            var iWidth = 400;
+                            var iHeight = 500;
+                            var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+                            var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+                            window.open(url, name, 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no');
+                        });
+                        return true;
+                    }
+                    else if (v == 'cancel')
+                        return true;
+                };
+                $.jBox.confirm("确定申报此条加分项目吗？", "提示", submit);
+            },
+        });
+
+        function file1() {
+            window.location.href = "/App_Template/附件2-上海交通大学学生科技创新类大赛项目列表（修订）.docx";
+        };
+
+        function file2() {
+            window.location.href = "/App_Template/附件6-中国计算机学会推荐国际刊物会议列表2012.pdf";
+        };
+
+        function file3() {
+            window.location.href = "/App_Template/附件7-软件学院硕士研究生奖学金期刊会议分类.pdf";
+        };
+    </script>
+}
+
+<h2 style="font-family:Microsoft YaHei;text-align:center">软件学院学生综合测评奖励项目</h2>
+
+<body>
+    <div style="font-family:Microsoft YaHei">
+        <br />
+        <table id="bonus_table_normal"></table>
+    </div>
+    <p>
+        <b>附件一：</b>
+        <a style="color:blue" href="javascript:file1()">上海交通大学学生科技创新类大赛项目列表（修订）</a>
+    </p>
+    <div style="font-family:Microsoft YaHei">
+        <table id="bonus_table_competition"></table>
+    </div>
+    <p>
+        <b>附件二：</b>
+        <a style="color:blue" href="javascript:file2()">中国计算机学会推荐国际刊物会议列表</a>
+        <b>附件三：</b>
+        <a style="color:blue" href="javascript:file3()">软件学院硕士研究生奖学金期刊会议分类</a>
+    </p>
+    <div style="font-family:Microsoft YaHei">
+        <table id="bonus_table_paper"></table>
+    </div>
+</body>

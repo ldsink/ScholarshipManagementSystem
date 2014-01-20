@@ -1,0 +1,135 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+   <meta charset="utf-8" />
+   <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
+   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+   <!-- Mobile viewport optimized: h5bp.com/viewport -->
+   <meta name="viewport" content="width=device-width">
+
+   <title>奖（助）学金申请</title>
+
+   <link rel="stylesheet" type="text/css" href="../Scripts/BootMetro/css/bootmetro.css">
+   <link rel="stylesheet" type="text/css" href="../Scripts/BootMetro/css/bootmetro-responsive.css">
+   <link rel="stylesheet" type="text/css" href="../Scripts/BootMetro/css/bootmetro-icons.css">
+   <link rel="stylesheet" type="text/css" href="../Scripts/BootMetro/css/bootmetro-ui-light.css">
+   <link rel="stylesheet" type="text/css" href="../Scripts/BootMetro/css/datepicker.css">
+   <script src="../Scripts/BootMetro/js/modernizr-2.6.2.min.js"></script>
+</head>
+
+<body style="font-family:Microsoft YaHei;"><!--background-color:#C7EDCC;-->
+    <div id="wrap">
+        <!-- Header -->
+        <div id="nav-bar" class="">
+         <div class="pull-left">
+            <div id="header-container">
+				<a href="Student">
+					<h1 style="font-family:Microsoft YaHei">软件学院奖学金管理系统</h1>
+				</a>
+            </div>
+         </div>
+         <div class="pull-right">
+            <div id="top-info" class="pull-right"> 
+                欢迎使用 , @Html.ActionLink(User.Identity.Name, "Manage", "Account", routeValues: null, htmlAttributes: new { @class = "username", title = "Manage" })。
+                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" })) {
+                    @Html.AntiForgeryToken()
+                    <a href="javascript:document.getElementById('logoutForm').submit()">退出系统</a>
+                }
+            </div>
+         </div>
+      </div>
+   
+        <!-- Body -->
+        <div class="metro panorama">
+            <div class="panorama-sections">
+                <div class="panorama-section">
+                    <h2 style="font-family:Microsoft YaHei;">奖（助）学金申请</h2>
+                    <div class="tile-column-span-2">
+                        <a id="S_btn" class="tile wide imagetext bg-color-red">
+                            <p id="Scholarship" class="text-header"></p>
+                            <p id="S_detail" class="text4"></p>
+                        </a>
+                        <a id="G_btn" class="tile wide imagetext bg-color-blue">
+                            <p id="Grant" class="text-header"></p>
+                            <p id="G_detail" class="text4"></p> 
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <a id="panorama-scroll-prev" href="#"></a>
+    <a id="panorama-scroll-next" href="#"></a>
+    <div id="panorama-scroll-prev-bkg"></div>
+    <div id="panorama-scroll-next-bkg"></div>
+   </div>
+
+    <div style="font-family:Microsoft YaHei;text-align:center">
+        <div>
+            <p>推荐使用 Google Chrome 或者 Mozilla Firefox 浏览器。请不要使用360系列浏览器。</p>
+            <h4>&copy; @DateTime.Now.Year - 上海交通大学软件学院</h4>
+            <h4>&copy; @DateTime.Now.Year - School of Software, Shanghai Jiao Tong University.</h4>
+        </div>
+    </div>
+
+   <!-- Grab Google CDN's jQuery. fall back to local if necessary -->
+   <script src="//code.jquery.com/jquery-1.10.0.min.js"></script>
+   <script>window.jQuery || document.write("<script src='../Scripts/BootMetro/js/jquery-1.10.0.min.js'>\x3C/script>")</script>
+
+   <script type="text/javascript" src="../Scripts/BootMetro/js/min/bootstrap.min.js"></script>
+   <script type="text/javascript" src="../Scripts/BootMetro/js/bootmetro-panorama.js"></script>
+   <script type="text/javascript" src="../Scripts/BootMetro/js/bootmetro-pivot.js"></script>
+   <script type="text/javascript" src="../Scripts/BootMetro/js/bootmetro-charms.js"></script>
+   <script type="text/javascript" src="../Scripts/BootMetro/js/bootstrap-datepicker.js"></script>
+
+   <script type="text/javascript" src="../Scripts/BootMetro/js/jquery.mousewheel.min.js"></script>
+   <script type="text/javascript" src="../Scripts/BootMetro/js/jquery.touchSwipe.min.js"></script>
+    
+    <script type="text/javascript">
+       $('.panorama').panorama({
+           //nicescroll: false,
+           showscrollbuttons: true,
+           keyboard: true,
+           parallax: true
+       });
+       $('#pivot').pivot();
+
+       var baseUri = '../api/Apply';
+       function S_Update(data) {
+           if (data == "取消申请奖学金")
+               $('#S_detail').text("您已提交奖学金申请意愿，再次点击取消。");
+           else
+               $('#S_detail').text("您还未提交奖学金申请意愿，点击提交申请。");
+       }
+       function G_Update(data) {
+           if (data == "取消申请助学金")
+               $('#G_detail').text("您已提交助学金申请意愿，再次点击取消。");
+           else
+               $('#G_detail').text("您还未提交助学金申请意愿，点击提交申请。");
+       }
+       $(document).ready(function () {
+           $.getJSON(baseUri + "/?apply=Scholarship", function (data) {
+               $('#Scholarship').text(data);
+               S_Update(data);
+           });
+           $.getJSON(baseUri + "/?apply=Grant", function (data) {
+               $('#Grant').text(data);
+               G_Update(data);
+           });
+       });
+       $('#S_btn').click(function () {
+           $.getJSON(baseUri + "/?apply=submitScholarship", function (data) { history.go(0); });
+       });
+       $('#G_btn').click(function () {
+           $.getJSON(baseUri + "/?apply=submitGrant", function (data) { history.go(0); });
+       });
+   </script>
+
+</body>
+</html>

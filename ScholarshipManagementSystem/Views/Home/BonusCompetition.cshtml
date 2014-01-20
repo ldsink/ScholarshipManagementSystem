@@ -1,0 +1,200 @@
+﻿@model ScholarshipManagementSystem.Models.BonusProject
+
+@{
+    ViewBag.Title = "比赛加分项目管理";
+}
+
+@section Scripts {
+  <script type="text/javascript" src="/Scripts/jqGrid/js/i18n/grid.locale-cn.js"></script>
+  <script type="text/javascript" src="/Scripts/jqGrid/js/jquery.jqGrid.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/Scripts/jqGrid/css/start/jquery-ui-1.10.3.custom.css" />
+  <link rel="stylesheet" type="text/css" href="/Scripts/jqGrid/css/ui.jqgrid.css" />
+
+  <script type="text/javascript" src="~/Scripts/jBox/jquery.jBox-2.3.min.js"></script>
+  <script type="text/javascript" src="~/Scripts/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+  <link type="text/css" rel="stylesheet" href="~/Scripts/jBox/Skins2/Green/jbox.css"/>
+
+  <script type="text/javascript">
+      var baseUri = '../api/BonusCompetition';
+
+      $("#bonus_table_competition").jqGrid({
+          caption: '比赛加分项目',
+          url: baseUri,
+          datatype: "json",
+          mtype: 'GET',
+          colNames: ['Id', '项目类型', '编号', '项目设置', '项目内容', '分值'],
+          colModel: [
+              { name: 'Id', index: 'Id', width: 1, align: "center", sortable: false, hidden: true },
+              { name: 'Type', index: 'Type', width: 80, align: "center", sortable: false },
+              { name: 'Num', index: 'Num', width: 40, align: "center", sortable: false },
+              { name: 'Name', index: 'Name', width: 80, align: "center", sortable: false },
+              { name: 'Content', index: 'Content', width: 200, align: "center", sortable: false },
+              { name: 'Score', index: 'Score', width: 40, align: "center", sortable: false },
+          ],
+          autowidth: true,
+          height: 1000,
+          rowNum: -1, // Set this parameter to -1 (unlimited) to disable this checking.
+          scroll: true,
+          sortname: 'Id',
+          sortorder: "desc",
+          jsonReader: {
+              root: "griddata",
+              total: "totalpages",
+              page: "currpage",
+              records: "totalrecords",
+              repeatitems: false
+          },
+          altclass: 'altRowsColour',
+          ondblClickRow: function (id) {
+              var data = $("#bonus_table_competition").jqGrid('getRowData', id);
+              // edit and delete
+              var html = '<div class="msg-div">' +
+                  '<div style="font-family:Microsoft YaHei;"><h3>　编号：' + data.Num + '</h3></div>' +
+                  '<h6>&ensp;项目类型：<input id="Type" type="text" name="Type" value="' + data.Type + '" /></h6>' +
+                  '<h6>&ensp;项目设置：<input id="Name" type="text" name="Name" value="' + data.Name + '" /></h6>' +
+                  '<h6>&ensp;项目内容：<input id="Content" type="text" name="Content" value="' + data.Content + '" /></h6>' +
+                  '<h6>&ensp;奖励分值：<input id="Score" type="text" name="Score" value="' + data.Score + '" /></h6>' +
+                  '</div>';
+
+              var states = {};
+              states.state1 = {
+                  content: html,
+                  buttons: { '更新': 2, '删除': 1, '取消': 0 },
+                  submit: function (v, h, f) {
+                      if (v == 0) {
+                          return true; // close the window
+                      }
+                      else if (v == 2) {
+                          h.find('.errorBlock').hide('fast', function () { $(this).remove(); });
+                          data.Type = f.Type;
+                          if (data.Type == "") {
+                              $('<div class="errorBlock" style="display:none;color:red;">　请填写项目类型！</div>').prependTo(h).show('fast');
+                              return false;
+                          }
+                          data.Name = f.Name;
+                          if (data.Name == "") {
+                              $('<div class="errorBlock" style="display:none;color:red;">　请填写项目设置！</div>').prependTo(h).show('fast');
+                              return false;
+                          }
+                          data.Content = f.Content;
+                          if (data.Content == "") {
+                              $('<div class="errorBlock" style="display:none;color:red;">　请填写项目内容！</div>').prependTo(h).show('fast');
+                              return false;
+                          }
+                          data.Score = f.Score;
+                          if (data.Score == "") {
+                              $('<div class="errorBlock" style="display:none;color:red;">　请填写奖励分值！</div>').prependTo(h).show('fast');
+                              return false;
+                          }
+                          $.ajax({
+                              url: baseUri + '/' + data.Id,
+                              type: 'PUT',
+                              data: data,
+                              error: function () { alert('更新失败！'); },
+                              success: function () { history.go(0); }
+                          });
+                          return true;
+                      }
+                      else if (v == 1) {
+                          var submit = function (v, h, f) {
+                              if (v == 'ok') {
+                                  $.ajax({
+                                      url: baseUri + '/' + data.Id,
+                                      type: 'DELETE',
+                                      error: function () { jBox.tip('删除失败。', 'info'); },
+                                      success: function () { history.go(0); }
+                                  });
+                              }
+                              else if (v == 'cancel')
+                                  jBox.tip(v, 'info');
+                              return true; //close
+                          };
+                          $.jBox.confirm("确定删除吗？", "提示", submit);
+                          return true;
+                      }
+                      return false;
+                  }
+              };
+              $.jBox.open(states, '编辑加分项目', 500, 'auto');
+          }
+      });
+
+      function AddProject() {
+          var html = '<div class="msg-div">' +
+              '<h6>&ensp;项目编号：<input id="Num" type="text" name="Num" value="" /></h6>' +
+              '<h6>&ensp;项目类型：<input id="Type" type="text" name="Type" value="" /></h6>' +
+              '<h6>&ensp;项目设置：<input id="Name" type="text" name="Name" value="" /></h6>' +
+              '<h6>&ensp;项目内容：<input id="Content" type="text" name="Content" value="" /></h6>' +
+              '<h6>&ensp;奖励分值：<input id="Score" type="text" name="Score" value="" /></h6>' +
+              '</div>';
+
+          var states = {};
+          states.state1 = {
+              content: html,
+              buttons: { '新增': 1, '取消': 0 },
+              submit: function (v, h, f) {
+                  if (v == 1) {
+                      h.find('.errorBlock').hide('fast', function () { $(this).remove(); });
+                      if (f.Num == "") {
+                          $('<div class="errorBlock" style="display:none;color:red;">　请填写项目编号！</div>').prependTo(h).show('fast');
+                          return false;
+                      }
+                      if (f.Type == "") {
+                          $('<div class="errorBlock" style="display:none;color:red;">　请填写项目类型！</div>').prependTo(h).show('fast');
+                          return false;
+                      }
+                      if (f.Name == "") {
+                          $('<div class="errorBlock" style="display:none;color:red;">　请填写项目设置！</div>').prependTo(h).show('fast');
+                          return false;
+                      }
+                      if (f.Content == "") {
+                          $('<div class="errorBlock" style="display:none;color:red;">　请填写项目内容！</div>').prependTo(h).show('fast');
+                          return false;
+                      }
+                      if (f.Score == "") {
+                          $('<div class="errorBlock" style="display:none;color:red;">　请填写奖励分值！</div>').prependTo(h).show('fast');
+                          return false;
+                      }
+                      $.ajax({
+                          url: baseUri,
+                          type: 'POST',
+                          data: {
+                              Num: f.Num,
+                              Type: f.Type,
+                              Name: f.Name,
+                              Content: f.Content,
+                              Score: f.Score,
+                          },
+                          error: function () { alert('新增失败！'); },
+                          success: function () { history.go(0); }
+                      });
+                      return true;
+                  }
+                  return false;
+              }
+          };
+          $.jBox.open(states, '添加加分项目', 500, 'auto');
+      };
+  </script>
+}
+
+<h2 style="font-family:Microsoft YaHei;text-align:center;color:green;">比赛加分项目管理</h2>
+
+<body>
+    <div>
+        <div style="font-family:Microsoft YaHei;text-align:left">
+                <a style="color:red;" href="BonusNormal">普通加分项目管理</a>
+		        <a style="color:blue;" href="BonusPaper">论文加分项目管理</a>
+                <a style="background-color:green;" href="BonusCompetition">比赛加分项目管理</a>
+        </div>
+        <div style="font-family:Microsoft YaHei;text-align:right">
+		    <a style="color:black;" href="javascript:AddProject()">添加新项目</a>
+            <a style="color:orange;" href="Verify">学生申报项目审核</a>
+        </div>
+    </div>
+	
+    <div style="font-family:Microsoft YaHei">
+        <br />
+        <table id="bonus_table_competition"></table>
+    </div>
+</body>

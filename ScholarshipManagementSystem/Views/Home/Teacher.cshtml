@@ -1,0 +1,191 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+   <meta charset="utf-8" />
+   <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
+   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+   <!-- Mobile viewport optimized: h5bp.com/viewport -->
+   <meta name="viewport" content="width=device-width">
+
+   <title>教师 - 主页</title>
+
+   <link rel="stylesheet" type="text/css" href="../Scripts/BootMetro/css/bootmetro.css">
+   <link rel="stylesheet" type="text/css" href="../Scripts/BootMetro/css/bootmetro-responsive.css">
+   <link rel="stylesheet" type="text/css" href="../Scripts/BootMetro/css/bootmetro-icons.css">
+   <link rel="stylesheet" type="text/css" href="../Scripts/BootMetro/css/bootmetro-ui-light.css">
+   <link rel="stylesheet" type="text/css" href="../Scripts/BootMetro/css/datepicker.css">
+   <script src="../Scripts/BootMetro/js/modernizr-2.6.2.min.js"></script>
+</head>
+
+<body style="font-family:Microsoft YaHei;"><!--background-color:#C7EDCC;-->
+    <div id="wrap">
+        <!-- Header -->
+        <div id="nav-bar" class="">
+         <div class="pull-left">
+            <div id="header-container">
+               <h1 style="font-family:Microsoft YaHei">软件学院奖学金管理系统</h1>
+               <div class="dropdown">
+                  <a class="header-dropdown dropdown-toggle accent-color" data-toggle="dropdown" href="#">
+                     功能列表
+                     <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                      <li>@Html.ActionLink("普通加分项目管理", "BonusNormal", "Home")</li>
+                      <li>@Html.ActionLink("比赛加分项目管理", "BonusCompetition", "Home")</li>
+                      <li>@Html.ActionLink("论文加分项目管理", "BonusPaper", "Home")</li>
+                      <li>@Html.ActionLink("学生申报项目审核", "Verify", "Home")</li>
+                      <li>@Html.ActionLink("综合测评大表", "BigTable", "Home")</li>
+                      <li>@Html.ActionLink("违纪情况管理", "Disciplinary", "Home")</li>
+                      <li>@Html.ActionLink("注销学生帐号信息", "DeleteUser", "Home")</li>
+                      <li>@Html.ActionLink("数据导入导出", "ImExport", "Home")</li>
+                      <li>@Html.ActionLink("——数据导入", "Import", "Home")</li>
+                  </ul>
+            </div>
+            </div>
+         </div>
+         <div class="pull-right">
+            <div id="top-info" class="pull-right"> 
+                欢迎使用 , @Html.ActionLink(User.Identity.Name, "Manage", "Account", routeValues: null, htmlAttributes: new { @class = "username", title = "Manage" })。
+                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" })) {
+                    @Html.AntiForgeryToken()
+                    <a href="javascript:document.getElementById('logoutForm').submit()">退出系统</a>
+                }
+            </div>
+         </div>
+      </div>
+   
+        <!-- Body -->
+        <div class="metro panorama">
+            <div class="panorama-sections">
+                <div class="panorama-section">
+                    <h2 style="font-family:Microsoft YaHei;">　</h2>
+                    <div class="tile-column-span-2 tile-span-4">
+                        <a class="tile wide bg-color-red" href="BonusNormal">
+                            <div class="text-header">　</div>
+                            <div class="text-header">普通加分</div>
+                            <div class="text-header">项目管理</div>
+                        </a>
+                        <a class="tile wide bg-color-green" href="BonusCompetition">
+                            <div class="text-header">　</div>
+                            <div class="text-header">比赛加分</div>
+                            <div class="text-header">项目管理</div>
+                        </a>
+                        <a class="tile wide bg-color-blue" href="BonusPaper">
+                            <div class="text-header">　</div>
+                            <div class="text-header">论文加分</div>
+                            <div class="text-header">项目管理</div>
+                        </a>
+                        <a class="tile wide bg-color-yellow" href="Verify">
+                            <div class="text-header">　</div>
+                            <div class="text-header">学生申报</div>
+                            <div class="text-header">项目审核</div>
+                        </a>
+                    </div>
+                </div>
+                <div class="panorama-section">
+                    <h2>　</h2>
+                    <div class="tile-column-span-2">
+                        <a class="tile wide imagetext" href="ExportForStudentInfo">
+                            <div class="image-wrapper">
+                                <span class="icon icon-user"></span>
+                            </div>
+                            <div class="text-header">学生信息</div>
+                            <br />
+                            <div class="text3">查看学生的申请意愿及评选资格。</div>
+                        </a>
+                        <a class="tile wide imagetext bg-color-blueDark" href="BigTable">
+                            <div class="image-wrapper">
+                                <span class="icon icon-feed"></span>
+                            </div>
+                            <div class="text-header">综合测评</div>
+                            <div class="text-header">　　大表</div>
+                            <br />
+                            <div class="text4">查看并导出综合测评大表.</div>
+                        </a>
+                    </div>
+                </div>
+                <div class="panorama-section">
+                    <h2>　</h2>
+                    <div class="tile-column-span-2 tile-span-4">
+                        <a class="tile wide imagetext bg-color-red" href="Disciplinary">
+                            <div class="tile wide text bg-color-red">
+                                <div class="text-header">Disciplinary</div>
+                                <div class="text-header">违纪情况管理</div>
+                            </div>               
+                        </a>
+                        <a class="tile wide imagetext bg-color-orange" href="DeleteUser">
+                            <div class="image-wrapper">
+                                <span class="icon icon-delete"></span>
+                            </div>
+                            <div>
+                                <div class="text-header">注销学生</div>
+                                <div class="text-header">帐号信息</div>
+                            </div>
+                            <br />
+                            <div class="text3">注销学生账号，同时清除班级打分中注销学生的相关记录。</div>
+                        </a>
+                    </div>
+                    <div class="tile-column-span-1">
+                        <a class="tile squarepeek bg-color-purple" href="ImExport">
+                            <div class="image-wrapper">
+                                <span class="icon icon-export"></span>
+                            </div>
+                            <div class="text-inner">
+                                <div class="text-header">数据</div>
+                                <div class="text-header">导入</div>
+                                <div class="text-header">导出</div>
+                                <br />
+                                <div class="text3">Data import and export.</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <a id="panorama-scroll-prev" href="#"></a>
+    <a id="panorama-scroll-next" href="#"></a>
+    <div id="panorama-scroll-prev-bkg"></div>
+    <div id="panorama-scroll-next-bkg"></div>
+   </div>
+
+    <div style="font-family:Microsoft YaHei;text-align:center">
+        <div>
+            <p>推荐使用 Google Chrome 或者 Mozilla Firefox 浏览器。请不要使用360系列浏览器。</p>
+            <h4>&copy; @DateTime.Now.Year - 上海交通大学软件学院</h4>
+            <h4>&copy; @DateTime.Now.Year - School of Software, Shanghai Jiao Tong University.</h4>
+        </div>
+    </div>
+
+   <!-- Grab Google CDN's jQuery. fall back to local if necessary -->
+   <script src="//code.jquery.com/jquery-1.10.0.min.js"></script>
+   <script>window.jQuery || document.write("<script src='../Scripts/BootMetro/js/jquery-1.10.0.min.js'>\x3C/script>")</script>
+
+   <script type="text/javascript" src="../Scripts/BootMetro/js/min/bootstrap.min.js"></script>
+   <script type="text/javascript" src="../Scripts/BootMetro/js/bootmetro-panorama.js"></script>
+   <script type="text/javascript" src="../Scripts/BootMetro/js/bootmetro-pivot.js"></script>
+   <script type="text/javascript" src="../Scripts/BootMetro/js/bootmetro-charms.js"></script>
+   <script type="text/javascript" src="../Scripts/BootMetro/js/bootstrap-datepicker.js"></script>
+
+   <script type="text/javascript" src="../Scripts/BootMetro/js/jquery.mousewheel.min.js"></script>
+   <script type="text/javascript" src="../Scripts/BootMetro/js/jquery.touchSwipe.min.js"></script>
+    
+    <script type="text/javascript">
+       $('.panorama').panorama({
+           //nicescroll: false,
+           showscrollbuttons: true,
+           keyboard: true,
+           parallax: true
+       });
+       $('#pivot').pivot();
+   </script>
+
+</body>
+</html>
+

@@ -1,0 +1,69 @@
+﻿@{
+    Layout = null;
+}
+
+<h2 style="font-family:Microsoft YaHei;text-align:center">添加新的违纪记录</h2>
+
+<div class="msg-div" style="font-family:Microsoft YaHei;">
+    <link rel=stylesheet type="text/css" href="../Content/Scoring.css">
+    <p>　学号　　：<input id="SId" type="text" name="SId" /></p>
+    <p>　类型　　：<input id="Type" type="text" name="Type" /></p>
+    <p>　时间　　：<input id="Date" type="text" name="Date" onclick="openDatepicker()" onkeydown="openDatepicker()" /></p>
+    <div id="datepicker"></div>
+    <p>　说明　　：<input id="Notes" type="text" name="Notes" /></p>
+    <p>　评选资格：<select id="Qualification"><option value =false>否</option><option value=true>是</option></select></p>
+    <div style="text-align:center;">
+        <input class="uploadButton" type="button" name="submitButton" onclick="submitDate()" value="确定" />
+        <input class="uploadButton" type="button" name="closeButton" onclick="closeWindow()" value="关闭" />
+    </div>    
+</div>
+
+<script type="text/javascript" src="/Scripts/jquery-1.8.2.js"></script>
+
+<link rel="stylesheet" href="/Content/jquery-ui-1.10.3.start/css/start/jquery-ui-1.10.3.custom.css" >
+<script src="/Content/jquery-ui-1.10.3.start/js/jquery-1.9.1.js"></script>
+<script src="/Content/jquery-ui-1.10.3.start/js/jquery-ui-1.10.3.custom.js"></script>
+
+<script type="text/javascript">
+    function openDatepicker() {
+        $("#datepicker").datepicker("dialog", null,
+            function (selectDate) { $("#Date").val(selectDate); }
+        );
+    }
+
+    function submitDate() {
+        var punish = {};
+        punish.SId = $("#SId").val();
+        if (punish.SId == "") {
+            alert('请填写违纪学生学号！');
+            return false;
+        }
+        punish.Type = $("#Type").val();
+        if (punish.Type == "") {
+            alert('请填写违纪类型！');
+            return false;
+        }
+        punish.Date = $("#Date").val();
+        if (punish.Date == "") {
+            alert('请选择违纪时间！');
+            return false;
+        }
+        punish.Notes = $("#Notes").val();
+        punish.Qualification =  $("#Qualification").val();
+        $.ajax({
+            url: '../api/Disciplinary',
+            type: 'POST',
+            data: punish,
+            error: function () { alert('提交失败，请确认输入学号是否正确！'); },
+            success: function () {
+                window.opener.history.go(0);
+                window.close();
+            }
+        });
+    }
+
+    function closeWindow() {
+        window.opener = null;
+        window.close();
+    }
+</script>

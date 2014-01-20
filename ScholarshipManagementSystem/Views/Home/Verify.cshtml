@@ -1,0 +1,300 @@
+﻿@model ScholarshipManagementSystem.Models.BonusFVD
+
+@{
+    ViewBag.Title = "加分项审核";
+}
+
+@section Scripts {
+ @Scripts.Render("~/bundles/jqueryval")
+  <!-- knockout -->
+  <script type="text/javascript" src="@Url.Content("~/Scripts/knockout-2.2.0.js")"></script>
+  <!-- JBox -->
+  <script type="text/javascript" src="~/Scripts/jquery-1.8.2.min.js"></script>
+  <script type="text/javascript" src="~/Scripts/jBox/jquery.jBox-2.3.min.js"></script>
+  <script type="text/javascript" src="~/Scripts/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+  <link type="text/css" rel="stylesheet" href="~/Scripts/jBox/Skins/Blue/jbox.css"/>
+  <script type="text/javascript">
+      var baseUri = '@ViewBag.ApiUrl';
+      
+      function VerifyViewModel() {
+          var self = this;
+          self.verify = ko.observableArray();
+          self.DisplayBonus = function (verify) {
+              if (verify.Bonustype < 1 || verify.Bonustype > 3) {
+                  $.jBox.messager('发生未知错误。', '提示');
+                  return;
+              }
+              var html1 = '<div class="msg-div">' +
+                      '<h6>&ensp;项目设置：<input id="Date" type="text" name="Date" value="' +
+                      verify.HName + '" /></h6>' +
+                      '<h6>&ensp;获奖时间：<input id="Date" type="text" name="Date" value="' +
+                      verify.Date + '" /></h6>' +
+                      '<h6>&ensp;备注信息：<input id="Date" type="text" name="Date" value="' +
+                      verify.Notes + '"/></h6>' +
+                      '<div class="errorBlock" style="display: none;"></div>' +
+                      '</div>';
+              if (verify.Bonustype == 1) { // ProjectBonus
+                  var states = {};
+                  states.state1 = {
+                      content: html1,
+                      buttons: { '取消': 0, '通过': 1, '不通过': 2 },
+                      submit: function (v, h, f) {
+                          if (v == 0) {
+                              return true; // close the window
+                          }
+                          if (v == 1) {
+                              $.getJSON(baseUri + '/?id=' + verify.Id + '&state=true', function (data) {
+                                  var t_url = baseUri + '/' + "?name=" + $('#Name').val() + '&' + "classid=" + $('#classId').val()
+                                         + '&' + "id=" + $('#studentId').val() + '&' + "num=" + $('#bonusNum').val()
+                                         + '&' + "type=" + $('#verifyType').val();
+                                  var url = encodeURI(t_url);
+                                  $.getJSON(url, self.verify);
+                              });
+                              return true;
+                          }
+                          if (v == 2) {
+                              $.getJSON(baseUri + '/?id=' + verify.Id + '&state=false', function (data) {
+                                  var t_url = baseUri + '/' + "?name=" + $('#Name').val() + '&' + "classid=" + $('#classId').val()
+                                         + '&' + "id=" + $('#studentId').val() + '&' + "num=" + $('#bonusNum').val()
+                                         + '&' + "type=" + $('#verifyType').val();
+                                  var url = encodeURI(t_url);
+                                  $.getJSON(url, self.verify);
+                              });
+                              return true;
+                          }
+                          return false;
+                      }
+                  };
+                  $.jBox.open(states, '详细信息', 500, 'auto');
+              }
+              var html2 = '<div class="msg-div">' +
+                      '<h6>&ensp;竞赛等级：<input id="Date" type="text" name="Date" value="' +
+                      verify.Level + '" /></h6>' +
+                      '<h6>&ensp;竞赛名称：<input id="Date" type="text" name="Date" value="' +
+                      verify.HName + '" /></h6>' +
+                      '<h6>&ensp;参赛项目：<input id="Date" type="text" name="Date" value="' +
+                      verify.LName + '" /></h6>' +
+                      '<h6>&ensp;获奖等级：<input id="Date" type="text" name="Date" value="' +
+                      verify.Ranking + '" /></h6>' +
+                      '<h6>&ensp;获奖时间：<input id="Date" type="text" name="Date" value="' +
+                      verify.Date + '" /></h6>' +
+                      '<h6>&ensp;备注信息：<input id="Date" type="text" name="Date" value="' +
+                      verify.Notes + '"/></h6>' +
+                      '<div class="errorBlock" style="display: none;"></div>' +
+                      '</div>';
+              if (verify.Bonustype == 2) { // CompetitionBonus
+                  var states = {};
+                  states.state1 = {
+                      content: html2,
+                      buttons: { '取消': 0, '通过': 1, '不通过': 2 },
+                      submit: function (v, h, f) {
+                          if (v == 0) {
+                              return true; // close the window
+                          }
+                          if (v == 1) {
+                              $.getJSON(baseUri + '/?id=' + verify.Id + '&state=true', function (data) {
+                                  var t_url = baseUri + '/' + "?name=" + $('#Name').val() + '&' + "classid=" + $('#classId').val()
+                                         + '&' + "id=" + $('#studentId').val() + '&' + "num=" + $('#bonusNum').val()
+                                         + '&' + "type=" + $('#verifyType').val();
+                                  var url = encodeURI(t_url);
+                                  $.getJSON(url, self.verify);
+                              });
+                              return true;
+                          }
+                          if (v == 2) {
+                              $.getJSON(baseUri + '/?id=' + verify.Id + '&state=false', function (data) {
+                                  var t_url = baseUri + '/' + "?name=" + $('#Name').val() + '&' + "classid=" + $('#classId').val()
+                                         + '&' + "id=" + $('#studentId').val() + '&' + "num=" + $('#bonusNum').val()
+                                         + '&' + "type=" + $('#verifyType').val();
+                                  var url = encodeURI(t_url);
+                                  $.getJSON(url, self.verify);
+                              });
+                              return true;
+                          }
+                          return false;
+                      }
+                  };
+                  $.jBox.open(states, '详细信息', 500, 'auto');
+              }
+              var html3 = '<div class="msg-div">' +
+                      '<h6>&ensp;会议等级：<input id="Date" type="text" name="Date" value="' +
+                      verify.Level + '" /></h6>' +
+                      '<h6>&ensp;会议方向：<input id="Date" type="text" name="Date" value="' +
+                      verify.Way + '" /></h6>' +
+                      '<h6>&ensp;会议名称：<input id="Date" type="text" name="Date" value="' +
+                      verify.HName + '" /></h6>' +
+                      '<h6>&ensp;论文名称：<input id="Date" type="text" name="Date" value="' +
+                      verify.LName + '" /></h6>' +
+                      '<h6>&ensp;作者顺序：<input id="Date" type="text" name="Date" value="' +
+                      verify.Ranking + '" /></h6>' +
+                      '<h6>&ensp;获奖时间：<input id="Date" type="text" name="Date" value="' +
+                      verify.Date + '" /></h6>' +
+                      '<h6>&ensp;备注信息：<input id="Date" type="text" name="Date" value="' +
+                      verify.Notes + '"/></h6>' +
+                      '<div class="errorBlock" style="display: none;"></div>' +
+                      '</div>';
+              if (verify.Bonustype == 3) { // PaperBonus
+                  var states = {};
+                  states.state1 = {
+                      content: html3,
+                      buttons: { '取消': 0, '通过': 1, '不通过': 2 },
+                      submit: function (v, h, f) {
+                          if (v == 0) {
+                              return true; // close the window
+                          }
+                          if (v == 1) {
+                              $.getJSON(baseUri + '/?id=' + verify.Id + '&state=true', function (data) {
+                                  var t_url = baseUri + '/' + "?name=" + $('#Name').val() + '&' + "classid=" + $('#classId').val()
+                                         + '&' + "id=" + $('#studentId').val() + '&' + "num=" + $('#bonusNum').val()
+                                         + '&' + "type=" + $('#verifyType').val();
+                                  var url = encodeURI(t_url);
+                                  $.getJSON(url, self.verify);
+                              });
+                              return true;
+                          }
+                          if (v == 2) {
+                              $.getJSON(baseUri + '/?id=' + verify.Id + '&state=false', function (data) {
+                                  var t_url = baseUri + '/' + "?name=" + $('#Name').val() + '&' + "classid=" + $('#classId').val()
+                                         + '&' + "id=" + $('#studentId').val() + '&' + "num=" + $('#bonusNum').val()
+                                         + '&' + "type=" + $('#verifyType').val();
+                                  var url = encodeURI(t_url);
+                                  $.getJSON(url, self.verify);
+                              });
+                              return true;
+                          }
+                          return false;
+                      }
+                  };
+                  $.jBox.open(states, '详细信息', 500, 'auto');
+              }
+          }
+
+          self.PermitBonus = function (verify) {
+              $.getJSON(baseUri + '/?id=' + verify.Id + '&state=true', function (data) {
+                  var t_url = baseUri + '/' + "?name=" + $('#Name').val() + '&' + "classid=" + $('#classId').val()
+                        + '&' + "id=" + $('#studentId').val() + '&' + "num=" + $('#bonusNum').val()
+                        + '&' + "type=" + $('#verifyType').val();
+                  var url = encodeURI(t_url);
+                  $.getJSON(url, self.verify);
+              });
+          }
+          self.NotPermitBonus = function (verify) {
+              $.getJSON(baseUri + '/?id=' + verify.Id + '&state=false', function (data) {
+                  var t_url = baseUri + '/' + "?name=" + $('#Name').val() + '&' + "classid=" + $('#classId').val()
+                        + '&' + "id=" + $('#studentId').val() + '&' + "num=" + $('#bonusNum').val()
+                        + '&' + "type=" + $('#verifyType').val();
+                  var url = encodeURI(t_url);
+                  $.getJSON(url, self.verify);
+              });
+          }
+
+          self.find = function () {
+              var t_url = baseUri + '/' + "?name=" + $('#Name').val() + '&' + "classid=" + $('#classId').val()
+                        + '&' + "id=" + $('#studentId').val() + '&' + "num=" + $('#bonusNum').val()
+                        + '&' + "type=" + $('#verifyType').val();
+              var url = encodeURI(t_url);
+              $.getJSON(url, self.verify);
+          }
+
+          $.getJSON(baseUri, self.verify);
+      }
+
+      $(document).ready(function () {
+          ko.applyBindings(new VerifyViewModel());
+      })
+
+      $(function () {
+          $("#export_bt").click(function () {
+              var t_url = baseUri + '/' + "?way=Export" + '&' + "name=" + $('#Name').val() + '&' + "classid=" + $('#classId').val()
+                        + '&' + "id=" + $('#studentId').val() + '&' + "num=" + $('#bonusNum').val()
+                        + '&' + "type=" + $('#verifyType').val();
+              var url = encodeURI(t_url);
+              $.jBox.messager('正在准备数据，请稍候……', '提示');
+              $.getJSON(url, function (data) {
+                  window.location.href = "/App_Export/SpecificBonusTable.xlsx";
+              });
+          });
+      });
+  </script>
+}
+
+<body>
+    <h2 style="font-family:Microsoft YaHei;text-align:center;color:orange;">加分项审核</h2>
+    <br />
+    <a style="color:red;" href="BonusNormal">普通加分项目管理</a>
+    <a style="color:blue;" href="BonusPaper">论文加分项目管理</a>
+    <a style="color:green;" href="BonusCompetition">比赛加分项目管理</a>
+    <table style="font-family:Microsoft YaHei;margin: auto; width:800px; text-align:center">
+        <tr>
+            <td style="width:100px"><b>姓名</b></td>
+            <td style="width:100px"><b>班级</b></td>
+            <td style="width:120px"><b>学号</b></td>
+            <td style="width:120px"><b>加分项目编号</b></td>
+            <td style="width:80px"><b>审核状态</b></td>
+        </tr>
+        <tr>
+            <td>
+                <input id="Name" type="text" style="width:100px" />
+            </td>
+            <td>
+                <input id="classId" type="text" style="width:100px" />
+            </td>
+            <td>
+                <input id="studentId" type="text" style="width:120px" />
+            </td>
+            <td>
+                <input id="bonusNum" type="text" style="width:120px" />
+            </td>
+            <td>
+                <input id="verifyType" type="text" style="width:80px" />
+            </td>
+            <td style="width:50px">
+                <input id="findButton" type="button" value="查找" data-bind="click: $root.find" />
+            </td>
+            <td style="width:50px">
+                <input id="export_bt" type="button" value="导出"/>
+            </td>
+        </tr>
+    </table>
+    <br />
+    <div class="VerifyTable">
+        <table style="font-family:Microsoft YaHei;">
+            <thead>
+                <tr>
+                    <td style="width:80px;"><b>学号</b></td>
+                    <td style="width:70px;"><b>姓名</b></td>
+                    <td style="width:70px;"><b>班级</b></td>
+                    <td style="width:70px;"><b>项目编号</b></td>
+                    <td style="width:80px;"><b>项目类型</b></td>
+                    <td style="width:150px;"><b>项目内容</b></td>
+                    <td style="width:40px;"><b>分值</b></td>
+                    <td style="width:80px;"><b>审核状态</b></td>
+                    <td style="width:100px;"></td>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: verify">
+                <tr class="lineHeight">
+                    <td><span class="studentID" data-bind="text: $data.StudentId"/></td>
+                    <td><span class="studentName" data-bind="text: $data.StudentName"/></td>
+                    <td><span class="studentId" data-bind="text: $data.StudentClassId"/></td>
+                    <td><span data-bind="text: $data.Num"/></td>
+                    <td><span data-bind="text: $data.Type"/></td>
+                    <td><span data-bind="text: $data.Content"/></td>
+                    <td><span data-bind="text: $data.Score"/></td>
+                    <td><span data-bind="text: $data.State"/></td>
+                    <td>
+                        <div>
+                            <b><a style="color:blue;" href="#" data-bind="click: $root.DisplayBonus">详细信息</a></b>
+                        </div>
+                        <div>
+                            <b><span>
+                                <a style="color:green;" href="#" data-bind="click: $root.PermitBonus">通过</a>
+                                <a style="color:red;" href="#" data-bind="click: $root.NotPermitBonus">不通过</a>
+                            </span></b>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>

@@ -1,0 +1,177 @@
+﻿@model ScholarshipManagementSystem.Models.BigTableDTO
+
+@{
+    ViewBag.Title = "综合测评大表";
+}
+
+@section Scripts {
+    <script type="text/javascript" src="/Scripts/jquery-1.8.2.js"></script> 
+    <script type="text/javascript" src="/Scripts/jqGrid/js/i18n/grid.locale-cn.js"></script>
+    <script type="text/javascript" src="/Scripts/jqGrid/js/jquery.jqGrid.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/Scripts/jqGrid/css/start/jquery-ui-1.10.3.custom.css" />
+    <link rel="stylesheet" type="text/css" href="/Scripts/jqGrid/css/ui.jqgrid.css" />
+    <script type="text/javascript" src="/Scripts/jBox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/Scripts/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+    <link type="text/css" rel="stylesheet" href="/Scripts/jBox/Skins2/Yellow/jbox.css"/>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var standardUrl = "../api/BigTableStandard"
+            $.getJSON(standardUrl, function (data) {
+                $('#grade').val(data.Grade);
+                $('#scoreP').val(data.Study);
+                $('#scoringP').val(data.Scoring);
+                $('#dormitoryP').val(data.Dormitory);
+                $('#bonusP').val(data.Bonus);
+            });
+        })
+
+        $(function () {
+            $("#btn").click(function () {
+                var standard = {};
+                standard.Id = 1;
+                standard.Grade = $('#grade').val();
+                standard.Study = $('#scoreP').val();
+                standard.Scoring = $('#scoringP').val();
+                standard.Dormitory = $('#dormitoryP').val();
+                standard.Bonus = $('#bonusP').val();
+
+                $.ajax({
+                    type: "PUT", url: '../api/BigTableStandard/' + standard.Id, data: standard,
+                    success: function () { history.go(0);}
+                });
+            });
+
+            $("#export_btn").click(function () {
+                $.jBox.messager('正在准备数据，请稍候……', '提示');
+                $.getJSON("/api/Export/?type=BigTable", function (data) {
+                    window.location.href = "/App_Export/BigTable.xlsx";
+                });
+            });
+        });
+
+        $("#bigtable_t").jqGrid({
+            caption: '综合测评大表',
+            url: '../api/BigTable',
+            datatype: "json",
+            mtype: 'GET',
+            colNames: ['姓名', '班级', '学号', '成绩', '排名', '比例', '互评', '互评提交', '宿舍', '加分', 'CET4', 'CET6', 'TOFEL', '资格', '总成绩', '总排名', '总比例'],
+            colModel: [
+                { name: 'Name', index: 'Name', width: 100, align: "center", sortable: false },
+                { name: 'ClassId', index: 'ClassId', width: 100, align: "center", sortable: false },
+                { name: 'NumId', index: 'NumId', width: 100, align: "center", sortable: false },
+                {
+                    name: 'Score', index: 'Score', width: 50, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) { return cellvalue.toFixed(2); }
+                },
+                { name: 'Ranking', index: 'Ranking', width: 50, align: "center", sortable: false },
+                {
+                    name: 'Percent', index: 'Percent', width: 50, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        var temp = parseFloat(cellvalue * 100).toFixed(2);
+                        temp += '%';
+                        return temp;
+                    }
+                },
+                {
+                    name: 'Scoring', index: 'Scoring', width: 50, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) { return cellvalue.toFixed(2); }
+                },
+                {
+                    name: 'SubmitScoring', index: 'SubmitScoring', width: 70, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue == true) return "是";
+                        else return "否";
+                    }
+                },
+                {
+                    name: 'Dormitoty', index: 'Dormitoty', width: 50, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) { return cellvalue.toFixed(2); }
+                },
+                {
+                    name: 'Bonus', index: 'Bonus', width: 50, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) { return cellvalue.toFixed(2); }
+                },
+                { name: 'CET4', index: 'CET4', width: 50, align: "center", sortable: false },
+                { name: 'CET6', index: 'CET6', width: 50, align: "center", sortable: false },
+                { name: 'TOFEL', index: 'TOFEL', width: 50, align: "center", sortable: false },
+                {
+                    name: 'Qualification', index: 'Qualification', width: 50, align: "center", sortable: false,
+                    formatter:function(cellvalue, options, rowObject) {
+                        if(cellvalue == true) return "是";
+                        else return "否";}
+                },
+                {
+                    name: 'TotalScore', index: 'TotalScore', width: 50, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) { return cellvalue.toFixed(2); }
+                },
+                { name: 'TotalRanking', index: 'TotalRanking', width: 50, align: "center", sortable: false },
+                {
+                    name: 'TotalPercent', index: 'TotalPercent', width: 50, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        var temp = parseFloat(cellvalue * 100).toFixed(2);
+                        temp += '%';
+                        return temp;
+                    }
+                },
+            ],
+            autowidth: true,
+            height: 1000,
+            rowNum: -1, // Set this parameter to -1 (unlimited) to disable this checking.
+            scroll: true,
+            sortname: 'NumId',
+            sortorder: "desc",
+            jsonReader: {
+                root: "griddata",
+                total: "totalpages",
+                page: "currpage",
+                records: "totalrecords",
+                repeatitems: false
+            },
+            altclass: 'altRowsColour',
+        });
+    </script>
+}
+
+<h2 style="font-family:Microsoft YaHei;text-align:center">综合测评大表</h2><br />
+
+<div style="font-family:Microsoft YaHei;text-align:center">
+    <span>
+        <select id="grade">
+            <option value ="F09">本科生2009级</option>
+            <option value ="F10">本科生2010级</option>
+            <option value ="F11">本科生2011级</option>
+            <option value ="F12">本科生2012级</option>
+            <option value ="B09">研究生2009级</option>
+            <option value ="B10">研究生2010级</option>
+            <option value ="B11">研究生2011级</option>
+            <option value ="B12">研究生2012级</option>
+        </select>
+    </span>
+    <span>　综合测评 ＝ 学积分 ×　</span>
+    <span>
+        <input id="scoreP" type="text" style="width: 30px" />
+    </span>
+    <span>　＋ 班级互评 ×　</span>
+    <span>
+        <input id="scoringP" type="text" style="width: 30px" />
+    </span>
+    <span>　＋ 宿舍成绩 ×　</span>
+    <span>
+        <input id="dormitoryP" type="text" style="width: 30px" />
+    </span>
+    <span>　＋ 加分 ×　</span>
+    <span>
+        <input id="bonusP" type="text" style="width: 30px" />
+    </span>
+    <span>
+        　<input id="btn" type="button" value="确定" />
+    </span>
+    <span>
+        　<input id="export_btn" type="button" value="导出" />
+    </span>
+</div>
+
+<div>
+    <table id="bigtable_t"></table>
+</div>

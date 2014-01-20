@@ -1,0 +1,310 @@
+﻿@model ScholarshipManagementSystem.Models.ScoringDTO
+
+@{
+    ViewBag.Title = "班级打分";
+}
+
+@section Scripts {
+  <script type="text/javascript" src="/Scripts/jqGrid/js/i18n/grid.locale-cn.js"></script>
+  <script type="text/javascript" src="/Scripts/jqGrid/js/jquery.jqGrid.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/Scripts/jqGrid/css/ui-lightness/jquery-ui-1.10.2.custom.css" />
+  <link rel="stylesheet" type="text/css" href="/Scripts/jqGrid/css/ui.jqgrid.css" />
+
+  <script type="text/javascript" src="~/Scripts/jBox/jquery.jBox-2.3.min.js"></script>
+  <script type="text/javascript" src="~/Scripts/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+  <link type="text/css" rel="stylesheet" href="~/Scripts/jBox/Skins2/Yellow/jbox.css"/>
+  <script type="text/javascript" src="~/Scripts/Qiuzhe_Enhancements.js"></script>
+  <script type="text/javascript">
+      var baseUri = '../api/Scoring';
+
+      $("#submit_btn").click(function () {
+          $.getJSON(baseUri + "/?submit=check", function (data) {
+              alert(data);
+              history.go(0);
+          });
+      });
+
+      $("#export_btn").click(function () {
+          $.jBox.messager('正在处理导出数据，请稍候……', '提示');
+          $.getJSON("/api/ExportOwnScoring", function (data) {
+              var file_path = "/App_Export/" + data;
+              window.location.href = file_path;
+          });
+      });
+
+      $(document).ready(function () {
+          $.getJSON(baseUri + "/?submit=UnSubmited", function (data) { $('#UnSubmited').text(data); });
+          $.getJSON(baseUri + "/?submit=Submited", function (data) { $('#Submited').text(data); });
+      })
+
+      $("#scoring_t").jqGrid({
+          caption: '班级打分表',
+          url: '../api/Scoring',
+          datatype: "json",
+          mtype: 'GET',
+          colNames: ['Id', '打分人', '学号', '姓名', 'A', 'B', 'C', 'D', 'E', 'F', 'Total', '备注'],
+          colModel: [
+              { name: 'Id', index: 'Id', width: 1, align: "center", sortable: false, hidden: true },
+              { name: 'ScoringStudentInfoId', index: 'ScoringStudentInfoId', width: 1, align: "center", sortable: false, hidden: true },
+              { name: 'ScoredStudentInfoId', index: 'ScoredStudentInfoId', width: 60, align: "center", sortable: false },
+              { name: 'ScoredStudentName', index: 'ScoredStudentName', width: 50, align: "center", sortable: false },
+              {
+                  name: 'A', index: 'A', width: 20, align: "center", sortable: false,
+                  formatter: function (cellvalue, options, rowObject) { return cellvalue.toFixed(1); }
+              },
+              {
+                  name: 'B', index: 'B', width: 20, align: "center", sortable: false,
+                  formatter: function (cellvalue, options, rowObject) { return cellvalue.toFixed(1); }
+              },
+              {
+                  name: 'C', index: 'C', width: 20, align: "center", sortable: false,
+                  formatter: function (cellvalue, options, rowObject) { return cellvalue.toFixed(1); }
+              },
+              {
+                  name: 'D', index: 'D', width: 20, align: "center", sortable: false,
+                  formatter: function (cellvalue, options, rowObject) { return cellvalue.toFixed(1); }
+              },
+              {
+                  name: 'E', index: 'E', width: 20, align: "center", sortable: false,
+                  formatter: function (cellvalue, options, rowObject) { return cellvalue.toFixed(1); }
+              },
+              {
+                  name: 'F', index: 'F', width: 20, align: "center", sortable: false,
+                  formatter: function (cellvalue, options, rowObject) { return cellvalue.toFixed(1); }
+              },
+              {
+                  name: 'Total', index: 'Total', width: 30, align: "center", sortable: false,
+                  formatter: function (cellvalue, options, rowObject) { return cellvalue.toFixed(1); }
+              },
+              { name: 'Notes', index: 'Notes', width: 60, align: "center", sortable: false },
+          ],
+          autowidth: true,
+          height: 600, // 假设一个班30人，每人20。
+          rowNum: -1, // Set this parameter to -1 (unlimited) to disable this checking.
+          scroll: true,
+          sortname: 'Id',
+          sortorder: "desc",
+          jsonReader: {
+              root: "griddata",
+              total: "totalpages",
+              page: "currpage",
+              records: "totalrecords",
+              repeatitems: false
+          },
+          altclass: 'altRowsColour',
+          ondblClickRow: function (id) {
+              var scoring = $("#scoring_t").jqGrid('getRowData', id);
+              var html = '<div class="msg-div">' +
+                    '<div style="font-family:Microsoft YaHei;"><h3>　姓名：' + scoring.ScoredStudentName + '　　学号：' + scoring.ScoredStudentInfoId + '</h3></div>' +
+                    '<div style="font-family:Microsoft YaHei;"><span>　<strong>A</strong>　　<input style="width:30px;" id="A" type="text" name="A" value="' + scoring.A + '" />　满分8分，基本分5分，级差0.5分</span></div>' +
+                    '<div style="font-family:Microsoft YaHei;"><span>　<strong>B</strong>　　<input style="width:30px;" id="B" type="text" name="B" value="' + scoring.B + '" />　满分7分，基本分4分，级差0.5分</span></div>' +
+                    '<div style="font-family:Microsoft YaHei;"><span>　<strong>C</strong>　　<input style="width:30px;" id="C" type="text" name="C" value="' + scoring.C + '" />　满分6分，基本分3分，级差0.5分</span></div>' +
+                    '<div style="font-family:Microsoft YaHei;"><span>　<strong>D</strong>　　<input style="width:30px;" id="D" type="text" name="D" value="' + scoring.D + '" />　满分3分，基本分1分，级差0.2分</span></div>' +
+                    '<div style="font-family:Microsoft YaHei;"><span>　<strong>E</strong>　　<input style="width:30px;" id="E" type="text" name="E" value="' + scoring.E + '" />　满分3分，基本分1分，级差0.2分</span></div>' +
+                    '<div style="font-family:Microsoft YaHei;"><span>　<strong>F</strong>　　<input style="width:30px;" id="F" type="text" name="F" value="' + scoring.F + '" />　满分3分，基本分1分，级差0.2分</span></div>' +
+                    '<div><h4>　备注　<input style="width:200px;" id="Notes" type="text" name="Notes" value="' + scoring.Notes + '" /></h4></div>' +
+                    '</div>';
+              var states = {};
+              states.state1 = {
+                  content: html,
+                  buttons: { '确定': 1, '取消': 0 },
+                  submit: function (v, h, f) {
+                      if (v == 0) {
+                          return true; // close the window
+                      }
+                      else {
+                          h.find('.errorBlock').hide('fast', function () { $(this).remove(); });
+                          scoring.A = f.A;
+                          scoring.B = f.B;
+                          scoring.C = f.C;
+                          scoring.D = f.D;
+                          scoring.E = f.E;
+                          scoring.F = f.F;
+                          scoring.Notes = f.Notes;
+
+                          var diffEqual = 0.00001;
+                          var diff = 10;
+                          var check, rightScoring;
+                          // data check for A
+                          for (check = 0, rightScoring = 5; rightScoring <= 8.0001; rightScoring += 0.5) {
+                              diff = Math.abs(rightScoring - scoring.A)
+                              if (diff < diffEqual) {
+                                  check = 1;
+                                  scoring.A = rightScoring;
+                                  break;
+                              }
+                          }
+                          if (check == 0) {
+                              alert("　A 项打分不符合要求!\n\n基本分为5分，满分为8分，级差0.5分。");
+                              return false;
+                          }
+                          // data check for B
+                          for (check = 0, rightScoring = 4; rightScoring <= 7.0001; rightScoring += 0.5) {
+                              diff = Math.abs(rightScoring - scoring.B)
+                              if (diff < diffEqual) {
+                                  check = 1;
+                                  scoring.B = rightScoring;
+                                  break;
+                              }
+                          }
+                          if (check == 0) {
+                              alert("　B 项打分不符合要求!\n\n基本分为4分，满分为7分，级差0.5分。");
+                              return false;
+                          }
+                          // data check for C
+                          for (check = 0, rightScoring = 3; rightScoring <= 6.0001; rightScoring += 0.5) {
+                              diff = Math.abs(rightScoring - scoring.C)
+                              if (diff < diffEqual) {
+                                  check = 1;
+                                  scoring.C = rightScoring;
+                                  break;
+                              }
+                          }
+                          if (check == 0) {
+                              alert("　C 项打分不符合要求!\n\n基本分为3分，满分为6分，级差0.5分。");
+                              return false;
+                          }
+                          // data check for D
+                          for (check = 0, rightScoring = 1; rightScoring <= 3.0001; rightScoring += 0.2) {
+                              diff = Math.abs(rightScoring - scoring.D)
+                              if (diff < diffEqual) {
+                                  check = 1;
+                                  scoring.D = rightScoring;
+                                  break;
+                              }
+                          }
+                          if (check == 0) {
+                              alert("　D 项打分不符合要求!\n\n基本分为1分，满分为3分，级差0.2分。");
+                              return false;
+                          }
+                          // data check for E
+                          for (check = 0, rightScoring = 1; rightScoring <= 3.0001; rightScoring += 0.2) {
+                              diff = Math.abs(rightScoring - scoring.E)
+                              if (diff < diffEqual) {
+                                  check = 1;
+                                  scoring.E = rightScoring;
+                                  break;
+                              }
+                          }
+                          if (check == 0) {
+                              alert("　E 项打分不符合要求!\n\n基本分为1分，满分为3分，级差0.2分。");
+                              return false;
+                          }
+                          // data check for F
+                          for (check = 0, rightScoring = 1; rightScoring <= 3.0001; rightScoring += 0.2) {
+                              diff = Math.abs(rightScoring - scoring.F)
+                              if (diff < diffEqual) {
+                                  check = 1;
+                                  scoring.F = rightScoring;
+                                  break;
+                              }
+                          }
+                          if (check == 0) {
+                              alert("　F 项打分不符合要求!\n\n基本分为1分，满分为3分，级差0.2分。");
+                              return false;
+                          }
+                          // calculate total score
+                          scoring.Total = scoring.A + scoring.B + scoring.C + scoring.D + scoring.E + scoring.F;
+                          diff = Math.abs(scoring.Total - 30)
+                          if (diff < diffEqual) {
+                              alert("对一个同学的各个项目打分不允许出现全部满分!");
+                              return false;
+                          }
+                          // update data
+                          $.ajax({
+                              url: baseUri + '/' + scoring.Id,
+                              type: 'PUT',
+                              data: scoring,
+                              error: function (data) {
+                                  $.jBox.alert(data.responseText, 'Error');
+                              },
+                              success: function () {
+                                  $("#scoring_t").setRowData(id, scoring, null);
+                              }
+                          });
+                          return true;
+                      }
+                      return false;
+                  }
+              };
+              $.jBox.open(states, '班级打分', 300, 'auto');
+          }
+      });
+  </script>
+}
+
+<h2 style="font-family:Microsoft YaHei;text-align:center">班级打分</h2>
+
+<body>
+    <link rel=stylesheet type="text/css" href="../Content/Scoring.css">
+    <div style="font-family:Microsoft YaHei" class="documentation">
+        <div style="color:red;">
+          <h4>打分说明：</h4>
+        </div>
+        <p>1、A-F各自对应项目如下，括号中是满分分值。</p>
+        <table border="1">
+           <thead><tr>
+            <th>种类</th>
+            <th>名称</th>
+            <th>要求</th>
+            <th>评分标准</th>
+          </tr></thead>
+          <tr>
+            <td>A（8）</td>
+            <td>思想政治与道德修养</td>
+            <td>热爱祖国，参加政治活动，遵守纪律。</td>
+            <td>基本分5分，级差0.5分</td>
+          </tr>
+          <tr>
+            <td>B（7）</td>
+            <td>社会实践与社会服务</td>
+            <td>积极参加各项社会实践和志愿活动。</td>
+            <td>基本分4分，级差0.5分</td>
+          </tr>
+          <tr>
+            <td>C（6）</td>
+            <td>科技学术于创新创业</td>
+            <td>积极参加和指导科技活动和各类科技竞赛。</td>
+            <td>基本分3分，级差0.5分</td>
+          </tr>
+          <tr>
+            <td>D（3）</td>
+            <td>文体艺术与身心发展</td>
+            <td>积极参加体育锻炼合理使用电脑和网络。</td>
+            <td>基本分1分，级差0.2分</td>
+          </tr>
+          <tr>
+            <td>E（3）</td>
+            <td>社团活动与社会工作</td>
+            <td>积极参加社会工作和各类社团活动。</td>
+            <td>基本分1分，级差0.2分</td>
+          </tr>
+          <tr>
+            <td>F（3）</td>
+            <td>技能培训及其他</td>
+            <td>需提供相关技能证书。</td>
+            <td>基本分1分，级差0.2分</td>
+          </tr>
+        </table>
+        <div>
+            <p>2、双击需要编辑的行进行打分。</p>
+            <p>3、对一个同学的各个项目打分不允许出现全部满分。</p>
+            <p>4、低于和高于班级平均分的人数均超过班级人数的30%。</p>
+            <p>5、低于20分或高于25分的人数均不超过班级人数的15%。</p>
+        </div>
+    </div>
+    <div>
+        <br />
+        <h2 style="font-family:Microsoft YaHei;color:red; text-align:center" id="UnSubmited"/>
+        <h2 style="font-family:Microsoft YaHei;color:blue; text-align:center" id="Submited"/>
+        <br />
+    </div>
+    <div style="font-family:Microsoft YaHei">
+        <br />
+        <table id="scoring_t"></table>
+        <div style="text-align:center;">
+            <button id="submit_btn" class="submitButton">提交班级打分表</button>
+            <button id="export_btn" class="OKButton">导出班级打分表</button>
+        </div>
+    </div>    
+</body>

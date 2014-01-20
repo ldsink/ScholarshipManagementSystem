@@ -1,0 +1,115 @@
+﻿@model ScholarshipManagementSystem.Models.BonusDTO
+
+@{
+    ViewBag.Title = "加分项申报";
+}
+
+@section Scripts {
+  <script type="text/javascript" src="/Scripts/jqGrid/js/i18n/grid.locale-cn.js"></script>
+  <script type="text/javascript" src="/Scripts/jqGrid/js/jquery.jqGrid.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/Scripts/jqGrid/css/start/jquery-ui-1.10.3.custom.css" />
+  <link rel="stylesheet" type="text/css" href="/Scripts/jqGrid/css/ui.jqgrid.css" />
+
+  <script type="text/javascript" src="~/Scripts/jBox/jquery.jBox-2.3.min.js"></script>
+  <script type="text/javascript" src="~/Scripts/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+  <link type="text/css" rel="stylesheet" href="~/Scripts/jBox/Skins2/Yellow/jbox.css"/>
+
+  <script type="text/javascript">
+      var baseUri = '@ViewBag.ApiUrl';
+
+      function AddBonus() {
+          var bonusNum = $('#bonusID').val();
+          $.post(baseUri, { Num: bonusNum }, function () { history.go(0); });
+      }
+
+      $("#bonus_t").jqGrid({
+          caption: '提交的加分项目',
+          url: '../api/Bonus',
+          datatype: "json",
+          mtype: 'GET',
+          colNames: ['Id', 'Bonustype', '类别', '编号', '加分内容', '级别', '会议方向', '竞赛 & 会议名称', '项目 & 论文题目', '顺序', '时间', '状态', '加分', '备注'],
+          colModel: [
+              { name: 'Id', index: 'Id', width: 1, align: "center", sortable: false, hidden: true },
+              { name: 'Bonustype', index: 'Bonustype', width: 1, align: "center", sortable: false, hidden: true },
+              { name: 'Type', index: 'Type', width: 90, align: "center", sortable: false },
+              { name: 'Num', index: 'Num', width: 30, align: "center", sortable: false },
+              { name: 'Content', index: 'Content', width: 100, align: "center", sortable: false },
+              { name: 'Level', index: 'Level', width: 30, align: "center", sortable: false },
+              { name: 'Way', index: 'Way', width: 1, align: "center", sortable: false, hidden: true },
+              { name: 'HName', index: 'HName', width: 100, align: "center", sortable: false },
+              { name: 'LName', index: 'LName', width: 100, align: "center", sortable: false },
+              { name: 'Ranking', index: 'Ranking', width: 30, align: "center", sortable: false },
+              { name: 'Date', index: 'Date', width: 60, align: "center", sortable: false },
+              { name: 'State', index: 'State', width: 30, align: "center", sortable: false },
+              { name: 'Score', index: 'Score', width: 30, align: "center", sortable: false },
+              { name: 'Notes', index: 'Notes', width: 50, align: "center", sortable: false },
+          ],
+          autowidth: true,
+          height: 400, // 假设最多20项。
+          rowNum: -1, // Set this parameter to -1 (unlimited) to disable this checking.
+          scroll: true,
+          sortname: 'Id',
+          sortorder: "desc",
+          jsonReader: {
+              root: "griddata",
+              total: "totalpages",
+              page: "currpage",
+              records: "totalrecords",
+              repeatitems: false
+          },
+          altclass: 'altRowsColour',
+          ondblClickRow: function (id) {
+              var bonus = $("#bonus_t").jqGrid('getRowData', id);
+              if (bonus.Bonustype < 1 || bonus.Bonustype > 3) {
+                  $.jBox.messager('发生未知错误。', '提示');
+                  return;
+              }
+
+              if (bonus.Bonustype == 1) { // ProjectBonus
+                  var url = "BonusNormalEdit/" + bonus.Id;
+                  var name = "普通加分项编辑";
+                  var iWidth = 400;
+                  var iHeight = 400;
+                  var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+                  var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+                  window.open(url, name, 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no');
+              }
+              else if (bonus.Bonustype == 2) { // CompetitionBonus
+                  var url = "BonusCompetitionEdit/" + bonus.Id;
+                  var name = "比赛加分项编辑";
+                  var iWidth = 400;
+                  var iHeight = 500;
+                  var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+                  var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+                  window.open(url, name, 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no');
+              }
+              else if (bonus.Bonustype == 3) { // PaperBonus
+                  var url = "BonusPaperEdit/" + bonus.Id;
+                  var name = "论文加分项编辑";
+                  var iWidth = 400;
+                  var iHeight = 500;
+                  var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+                  var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+                  window.open(url, name, 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no');
+              }
+          }
+      });
+  </script>
+}
+
+<link rel=stylesheet type="text/css" href="../Content/Bonus.css">
+
+<div style="font-family:Microsoft YaHei">
+    <h2 style="text-align:center">加分项申报</h2>
+    <div>
+        <h3 style="text-align:center">
+            加分项编号：
+            <input class="BonusID" type="text" id="bonusID" size="5" />
+            &nbsp;&nbsp;
+            <input type="button" value="申报新的加分项" onclick="AddBonus();" />
+        </h3>
+    </div>
+    <div>
+        <table id="bonus_t"></table>
+    </div>
+</div>

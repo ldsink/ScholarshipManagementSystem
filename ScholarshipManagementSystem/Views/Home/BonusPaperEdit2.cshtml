@@ -1,0 +1,115 @@
+﻿@{
+    Layout = null;
+}
+
+<h2 style="font-family:Microsoft YaHei;text-align:center">论文加分项编辑</h2>
+
+<div class="msg-div" style="font-family:Microsoft YaHei;">
+    <link rel=stylesheet type="text/css" href="/Content/Scoring.css">
+    <p>　会议级别：<input id="Level" type="text" name="Level" /></p>
+    <p>　会议方向：<input id="Way" type="text" name="Way" /></p>
+    <p>　会议名称：<input id="HName" type="text" name="HName" /></p>
+    <p>　论文名称：<input id="LName" type="text" name="LName" /></p>
+    <p>　作者顺序：<input id="Ranking" type="text" name="Ranking" /></p>
+    <p>　论文内容：<input id="Content" type="text" name="Content" /></p>
+    <p>　获奖时间：<input id="Date" type="text" name="Date" onclick="openDatepicker()" onkeydown="openDatepicker()" /></p>
+    <div id="datepicker"></div>
+    <p>　备注信息：<input id="Notes" type="text" name="Notes" /></p>
+    <p style="font-family:Microsoft YaHei;text-align:center;color:green;">编辑后请删除默认的备注信息。</p>
+    <div style="text-align:center;">
+        <input class="uploadButton" type="button" name="submitButton" onclick="submitDate()" value="确定" />
+        <input class="uploadButton" type="button" name="deleteButton" onclick="deleteDate()" value="删除" />
+        <input class="uploadButton" type="button" name="closeButton" onclick="closeWindow()" value="取消" />
+    </div>
+</div>
+
+<script type="text/javascript" src="/Scripts/jquery-1.8.2.js"></script>
+
+<link rel="stylesheet" href="/Content/jquery-ui-1.10.3.start/css/start/jquery-ui-1.10.3.custom.css" >
+<script src="/Content/jquery-ui-1.10.3.start/js/jquery-1.9.1.js"></script>
+<script src="/Content/jquery-ui-1.10.3.start/js/jquery-ui-1.10.3.custom.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var apiUrl = '@ViewBag.ApiUrl';
+        var id = '@ViewBag.Id'
+        $.getJSON(apiUrl + '/' + id, function (data) {
+            $('#Date').val(data.Date);
+            $('#Notes').val(data.Notes);
+            var detailUrl = '/api/BonusPaperDetail/' + data.Id;
+            $.getJSON(detailUrl, function (detail_data) {
+                $('#Level').val(detail_data.Level);
+                $('#LName').val(detail_data.LName);
+                $('#HName').val(detail_data.HName);
+                $('#Ranking').val(detail_data.Ranking);
+                $('#Content').val(detail_data.Content);
+                $('#Way').val(detail_data.Way);
+            });
+        });
+    })
+
+    function openDatepicker() {
+        $("#datepicker").datepicker("dialog", null,
+            function (selectDate) { $("#Date").val(selectDate); }
+        );
+    }
+
+    function submitDate() {
+        var apiUrl = '@ViewBag.ApiUrl';
+        var id = '@ViewBag.Id'
+        var detailUrl = '/api/BonusPaperDetail';
+        $.getJSON(apiUrl + '/' + id, function (data) {
+            $.getJSON(detailUrl + '/' + data.Id, function (detail_data) {
+                if ($("#Date").val() == "") {
+                    alert('请填写获奖日期！');
+                    return false;
+                }
+
+                data.Date = $("#Date").val();
+                data.Notes = $("#Notes").val();
+                $.ajax({
+                    url: apiUrl + '/' + data.Id,
+                    type: 'PUT',
+                    data: data,
+                    error: function () { alert('提交失败，请重新尝试！'); },
+                    success: function () {
+                        detail_data.Level = $('#Level').val();
+                        detail_data.LName = $('#LName').val();
+                        detail_data.HName = $('#HName').val();
+                        detail_data.Ranking = $('#Ranking').val();
+                        detail_data.Content = $('#Content').val();
+                        detail_data.Way = $('#Way').val();
+                        $.ajax({
+                            url: detailUrl + '/' + detail_data.Id,
+                            type: 'PUT',
+                            data: detail_data,
+                            error: function () { alert('提交失败，请重新尝试！'); },
+                            success: function () {
+                                alert("提交成功！");
+                                window.close();
+                            }
+                        });
+                    }
+                }); 
+            });
+        });
+    }
+
+    function deleteDate() {
+        $.ajax({
+            url: '@ViewBag.ApiUrl' + '/' + '@ViewBag.Id',
+            type: 'DELETE',
+            error: function () { alert('删除失败！'); },
+            success: function () {
+                alert("删除成功！");
+                window.close();
+            }
+        });
+        return true;
+    }
+
+    function closeWindow() {
+        window.opener = null;
+        window.close();
+    }
+</script>

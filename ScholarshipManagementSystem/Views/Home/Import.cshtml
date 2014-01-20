@@ -1,0 +1,284 @@
+﻿@{
+    ViewBag.Title = "数据导入";
+}
+
+@section Scripts {
+    <script type="text/javascript" src="/Scripts/jquery-1.8.2.js"></script>
+    <script type="text/javascript" src="/Scripts/AjaxFileUploader/ajaxfileupload.js"></script>
+    
+    <script type="text/javascript" src="/Scripts/jBox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/Scripts/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+    <link type="text/css" rel="stylesheet" href="/Scripts/jBox/Skins/Green/jbox.css"/>
+
+    <script type="text/javascript">
+      $("#UploadStudentInfoData").click(function () {
+          $.jBox.messager('正在上传并处理数据，请稍候……', '提示');
+          $.ajaxFileUpload({
+              url: "/api/Import",
+              secureuri: false,
+              fileElementId: 'studentinfo_excel_file',
+              dataType: 'text',
+              success: function (data, status) {
+                  $.jBox.success(data, '提示');
+              },
+              error: function (data, status, e) {
+                  $.jBox.error('学生信息导入失败！', '失败');
+              },
+          });
+      });
+
+      $("#UploadStudentInfoDataInit").click(function () {
+          $.jBox.messager('正在上传并处理数据，请稍候……', '提示');
+          $.ajaxFileUpload({
+              url: "/api/ImportPure",
+              secureuri: false,
+              fileElementId: 'studentinfo_pure_excel_file',
+              dataType: 'text',
+              success: function (data, status) {
+                  $.jBox.success(data, '提示');
+              },
+              error: function (data, status, e) {
+                  $.jBox.error('学生信息导入失败！', '失败');
+              },
+          });
+      });
+
+      function MakeClassScoringTable() {
+          $.jBox.messager('正在处理请求，请稍候……', '提示');
+          $.ajax({
+              url: '/api/MakeClassScoringTable/1',
+              type: 'GET',
+              success: function () { $.jBox.success('重新生成班级打分表成功！', '成功'); },
+              error: function () { $.jBox.error('重新生成班级打分表失败！', '失败'); },
+          });
+      }
+
+      $("#UploadStudyData").click(function () {
+          $.jBox.messager('正在上传并处理数据，请稍候……', '提示');
+          $.ajaxFileUpload({
+              url: "/api/ImportStudy",
+              secureuri: false,
+              fileElementId: 'study_excel_file',
+              dataType: 'text',
+              success: function (data, status) {
+                  $.jBox.success(data, '提示');
+              },
+              error: function (data, status, e) {
+                  $.jBox.error('学生学习成绩导入失败！', '失败');
+              },
+          });
+      });
+
+      $("#UploadDormitoryData").click(function () {
+          $.jBox.messager('正在上传并处理数据，请稍候……', '提示');
+          $.ajaxFileUpload({
+              url: "/api/ImportDormitory",
+              secureuri: false,
+              fileElementId: 'dormitory_excel_file',
+              dataType: 'text',
+              success: function (data, status) {
+                  $.jBox.success(data, '提示');
+              },
+              error: function (data, status, e) {
+                  $.jBox.error('学生宿舍成绩导入失败！', '失败');
+              },
+          });
+      });
+
+      $("#UploadEnglishData").click(function () {
+          $.jBox.messager('正在上传并处理数据，请稍候……', '提示');
+          $.ajaxFileUpload({
+              url: "/api/ImportEnglish",
+              secureuri: false,
+              fileElementId: 'english_excel_file',
+              dataType: 'text',
+              success: function (data, status) {
+                  $.jBox.success(data, '提示');
+              },
+              error: function (data, status, e) {
+                  $.jBox.error('学生英语成绩导入失败！', '失败');
+              },
+          });
+      });
+
+      $("#ImportProjectBonusData").click(function () {
+          $.jBox.messager('正在上传并处理数据，请稍候……', '提示');
+          $.ajaxFileUpload({
+              url: "/api/ImportProjectBonusData",
+              secureuri: false,
+              fileElementId: 'project_excel_file',
+              dataType: 'text',
+              success: function (data, status) {
+                  $.jBox.success(data, '提示');
+              },
+              error: function (data, status, e) {
+                  $.jBox.error('普通加分项目数据导入失败！', '失败');
+              },
+          });
+      });
+
+      $("#ImportPaperBonusData").click(function () {
+          $.jBox.messager('正在上传并处理数据，请稍候……', '提示');
+          $.ajaxFileUpload({
+              url: "/api/ImportPaperBonusData",
+              secureuri: false,
+              fileElementId: 'paper_excel_file',
+              dataType: 'text',
+              success: function (data, status) {
+                  $.jBox.success(data, '提示');
+              },
+              error: function (data, status, e) {
+                  $.jBox.error('论文加分项目数据导入失败！', '失败');
+              },
+          });
+      });
+
+      $("#ImportCompetitionBonusData").click(function () {
+          $.jBox.messager('正在上传并处理数据，请稍候……', '提示');
+          $.ajaxFileUpload({
+              url: "/api/ImportCompetitionBonusData",
+              secureuri: false,
+              fileElementId: 'competition_excel_file',
+              dataType: 'text',
+              success: function (data, status) {
+                  $.jBox.success(data, '提示');
+              },
+              error: function (data, status, e) {
+                  $.jBox.error('比赛加分项目数据导入失败！', '失败');
+              },
+          });
+      });
+
+      $("#ImportStudentProjectBonusData").click(function () {
+          $.jBox.messager('正在上传并处理数据，请稍候……', '提示');
+          $.ajaxFileUpload({
+              url: "/api/ImportStudentProjectBonus",
+              secureuri: false,
+              fileElementId: 'student_project_excel_file',
+              dataType: 'text',
+              success: function (data, status) {
+                  $.jBox.success(data, '提示');
+              },
+              error: function (data, status, e) {
+                  $.jBox.error('学生普通加分项导入失败！', '失败');
+              },
+          });
+      });
+
+      exportTemplateOfStudentInfo = function () {
+          window.location.href = "/App_Template/StudentInfoData.xlsx";
+      };
+
+      exportTemplateOfStudy = function () {
+          window.location.href = "/App_Template/Study.xlsx";
+      };
+
+      exportTemplateOfDormitory = function () {
+          window.location.href = "/App_Template/Dormitory.xlsx";
+      };
+
+      exportTemplateOfEnglish = function () {
+          window.location.href = "/App_Template/English.xlsx";
+      };
+
+      exportTemplateOfProjectBonus = function () {
+          window.location.href = "/App_Template/BonusNormal.xlsx";
+      };
+
+      exportTemplateOfPaperBonus = function () {
+          window.location.href = "/App_Template/BonusPaper.xlsx";
+      };
+
+      exportTemplateOfCompetitionBonus = function () {
+          window.location.href = "/App_Template/BonusCompetition.xlsx";
+      };
+
+      exportTemplateOfStudentProjectBonus = function () {
+          window.location.href = "/App_Template/StudentProjectBonus.xlsx";
+      };
+  </script>
+}
+
+<body>
+    <div style="border:2px solid blue;">
+        <div style="margin-left:20px">
+        <link rel=stylesheet type="text/css" href="../Content/Scoring.css">
+        <h2 style="font-family:Microsoft YaHei;">学生信息导入</h2>
+        <form enctype="multipart/form-data">
+            <h3 style="font-family:Microsoft YaHei;">学生信息导入（初始化）：</h3>
+            <input id="studentinfo_pure_excel_file" name="file1" type="file" /> 
+            <input class="uploadButton" type="button" value="上传数据" id="UploadStudentInfoDataInit" />
+            <input class="makeDataButton" type="button" value="生成班级打分表" onclick="MakeClassScoringTable()" />
+        </form>
+        <form enctype="multipart/form-data">
+            <h3 style="font-family:Microsoft YaHei;">学生信息导入（新增）：</h3>
+            <input id="studentinfo_excel_file" name="file1" type="file" /> 
+            <input class="uploadButton" type="button" value="上传数据" id="UploadStudentInfoData" />
+            <p style="color:darkblue">如果学生信息已存在，导入数据会覆盖之前数据。<a style="color:gray;" href="javascript:exportTemplateOfStudentInfo()">导入数据模版文件下载</a></p>
+        </form>
+        <form enctype="multipart/form-data">
+            <h3 style="font-family:Microsoft YaHei;">学习成绩导入：</h3>
+            <input id="study_excel_file" name="file1" type="file" /> 
+            <input class="uploadButton" type="button" value="上传数据" id="UploadStudyData" />
+            <p style="color:darkblue">如果学生学习成绩已存在，导入数据会覆盖之前数据。<a style="color:gray;" href="javascript:exportTemplateOfStudy()">导入数据模版文件下载</a></p>
+        </form>
+        <form enctype="multipart/form-data">
+            <h3 style="font-family:Microsoft YaHei;">宿舍成绩导入：</h3>
+            <input id="dormitory_excel_file" name="file1" type="file" /> 
+            <input class="uploadButton" type="button" value="上传数据" id="UploadDormitoryData" />
+            <p style="color:darkblue">如果学生宿舍成绩已存在，导入数据会覆盖之前数据。<a style="color:gray;" href="javascript:exportTemplateOfDormitory()">导入数据模版文件下载</a></p>
+        </form>
+        <form enctype="multipart/form-data">
+            <h3 style="font-family:Microsoft YaHei;">英语成绩导入：</h3>
+            <input id="english_excel_file" name="file1" type="file" /> 
+            <input class="uploadButton" type="button" value="上传数据" id="UploadEnglishData" />
+            <p style="color:darkblue">如果学生英语成绩已存在，导入数据会覆盖之前数据。<a style="color:gray;" href="javascript:exportTemplateOfEnglish()">导入数据模版文件下载</a></p>
+        </form>
+        </div>
+    </div>
+    <br />
+    <div style="border:2px solid green;">
+        <div style="margin-left:20px">
+        <h2 style="font-family:Microsoft YaHei;">加分项目导入</h2>
+        <p style="font-family:Microsoft YaHei;color:red;">
+            注意！此项仅用于初始化加分项目数据库，上线运行后不可导入，否则可能会造成数据库错误。管理加分项目请进入相对应的管理页面。
+        </p>
+        <a style="color:red;" href="BonusNormal">普通加分项目管理</a>
+		<a style="color:blue;" href="BonusPaper">论文加分项目管理</a>
+		<a style="color:green;" href="BonusCompetition">比赛加分项目管理</a>
+        <form enctype="multipart/form-data">
+            <h3 style="font-family:Microsoft YaHei;">普通加分项目导入：</h3>
+            <input id="project_excel_file" name="file1" type="file" /> 
+            <input class="uploadButton" type="button" value="上传数据" id="ImportProjectBonusData" />
+            <a style="color:gray;" href="javascript:exportTemplateOfProjectBonus()">导入数据模版文件下载</a>
+        </form>
+        <div style="margin-left:20px">
+            <form enctype="multipart/form-data">
+                <h4 style="font-family:Microsoft YaHei;">学生普通加分项导入：</h4>
+                <input id="student_project_excel_file" name="file1" type="file" /> 
+                <input class="uploadButton" type="button" value="上传数据" id="ImportStudentProjectBonusData" />
+                <a style="color:gray;" href="javascript:exportTemplateOfStudentProjectBonus()">导入数据模版文件下载</a>
+            </form>
+        </div>
+        <form enctype="multipart/form-data">
+            <h3 style="font-family:Microsoft YaHei;">论文加分项目导入：</h3>
+            <input id="paper_excel_file" name="file1" type="file" /> 
+            <input class="uploadButton" type="button" value="上传数据" id="ImportPaperBonusData" />
+            <a style="color:gray;" href="javascript:exportTemplateOfPaperBonus()">导入数据模版文件下载</a>
+        </form>
+        <form enctype="multipart/form-data">
+            <h3 style="font-family:Microsoft YaHei;">比赛加分项目导入：</h3>
+            <input id="competition_excel_file" name="file1" type="file" /> 
+            <input class="uploadButton" type="button" value="上传数据" id="ImportCompetitionBonusData" />
+            <a style="color:gray;" href="javascript:exportTemplateOfCompetitionBonus()">导入数据模版文件下载</a>
+        </form>
+        </div>
+    </div>
+    <br />
+    <div style="border:2px solid gray;">
+        <div style="margin-left:20px">
+            <input class="makeDataButton" type="button" value="重新生成班级打分表" onclick="MakeClassScoringTable()" />
+            <p>点击会清空班级打分表数据，重新生成班级打分表。</p>
+        </div>
+    </div>
+</body>

@@ -1,0 +1,112 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+   <meta charset="utf-8" />
+   <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
+   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+   <!-- Mobile viewport optimized: h5bp.com/viewport -->
+   <meta name="viewport" content="width=device-width">
+
+   <title>导入导出数据表</title>
+
+   <link rel="stylesheet" type="text/css" href="../Scripts/BootMetro/css/bootmetro.css">
+   <link rel="stylesheet" type="text/css" href="../Scripts/BootMetro/css/bootmetro-responsive.css">
+   <link rel="stylesheet" type="text/css" href="../Scripts/BootMetro/css/bootmetro-icons.css">
+   <link rel="stylesheet" type="text/css" href="../Scripts/BootMetro/css/bootmetro-ui-light.css">
+   <link rel="stylesheet" type="text/css" href="../Scripts/BootMetro/css/datepicker.css">
+   <script src="../Scripts/BootMetro/js/modernizr-2.6.2.min.js"></script>
+</head>
+
+<body style="font-family:Microsoft YaHei;"><!--background-color:#C7EDCC;-->
+    <div id="wrap">
+        <!-- Header -->
+        <div id="nav-bar" class="">
+         <div class="pull-left">
+            <div id="header-container">
+                <a href="Teacher">
+					<h1 style="font-family:Microsoft YaHei">软件学院奖学金管理系统</h1>
+				</a>
+            </div>
+         </div>
+         <div class="pull-right">
+            <div id="top-info" class="pull-right"> 
+                欢迎使用 , @Html.ActionLink(User.Identity.Name, "Manage", "Account", routeValues: null, htmlAttributes: new { @class = "username", title = "Manage" })。
+                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" })) {
+                    @Html.AntiForgeryToken()
+                    <a href="javascript:document.getElementById('logoutForm').submit()">退出系统</a>
+                }
+            </div>
+         </div>
+      </div>
+   
+        <!-- Body -->
+        <div class="metro panorama">
+            <div class="panorama-sections">
+                <div class="panorama-section">
+                    <h2 style="font-family:Microsoft YaHei;">数据导出</h2>
+                    <div class="tile-column-span-2">
+                        <a class="tile wide imagetext bg-color-pink" href="ExportForStudentInfo">                          
+                            <div class="text-header">Student Info Export</div>
+                            <div class="text-header">学生信息导出</div>
+                            <div class="text4">导出每个学生的奖、助学金申请意愿，评选资格和班级打分表提交情况。</div>
+                        </a>
+                        <a class="tile wide imagetext bg-color-gray" href="ExportForScoring">                          
+                            <div class="text-header">Class Scoring Export</div>
+                            <div class="text-header">班级打分导出</div>
+                            <div class="text4">查看、导出班级打分数据。</div>
+                        </a>
+                    </div>
+                </div>
+                <div class="panorama-section">
+                    <h2 style="font-family:Microsoft YaHei;">数据导入</h2>
+                    <div class="tile-column-span-2">
+                        <a class="tile wide imagetext" href="Import">
+                            <div class="text-header">数据导入</div>
+                            <div class="text-header"></div>
+                            <div class="text4">点击进入数据导入页面。</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <a id="panorama-scroll-prev" href="#"></a>
+    <a id="panorama-scroll-next" href="#"></a>
+    <div id="panorama-scroll-prev-bkg"></div>
+    <div id="panorama-scroll-next-bkg"></div>
+   </div>
+
+
+   <!-- Grab Google CDN's jQuery. fall back to local if necessary -->
+   <script src="//code.jquery.com/jquery-1.10.0.min.js"></script>
+   <script>window.jQuery || document.write("<script src='../Scripts/BootMetro/js/jquery-1.10.0.min.js'>\x3C/script>")</script>
+
+   <script type="text/javascript" src="../Scripts/BootMetro/js/min/bootstrap.min.js"></script>
+   <script type="text/javascript" src="../Scripts/BootMetro/js/bootmetro-panorama.js"></script>
+   <script type="text/javascript" src="../Scripts/BootMetro/js/bootmetro-pivot.js"></script>
+   <script type="text/javascript" src="../Scripts/BootMetro/js/bootmetro-charms.js"></script>
+   <script type="text/javascript" src="../Scripts/BootMetro/js/bootstrap-datepicker.js"></script>
+
+   <script type="text/javascript" src="../Scripts/BootMetro/js/jquery.mousewheel.min.js"></script>
+   <script type="text/javascript" src="../Scripts/BootMetro/js/jquery.touchSwipe.min.js"></script>
+    
+    <script type="text/javascript">
+       $('.panorama').panorama({
+           //nicescroll: false,
+           showscrollbuttons: true,
+           keyboard: true,
+           parallax: true
+       });
+
+       $('#pivot').pivot();
+   </script>
+
+</body>
+</html>
+

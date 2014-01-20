@@ -1,0 +1,27 @@
+﻿@model ScholarshipManagementSystem.Models.LocalPasswordModel
+@{
+    ViewBag.Title = "管理账户";
+}
+
+<hgroup class="title">
+    <h1>@ViewBag.Title.</h1>
+</hgroup>
+
+<link rel=stylesheet type="text/css" href="../Content/Login.css">
+
+<p class="message-success">@ViewBag.StatusMessage</p>
+
+<p>您已使用账号 <strong>@User.Identity.Name</strong> 登录.</p>
+
+@if (ViewBag.HasLocalPassword)
+{
+    @Html.Partial("_ChangePasswordPartial")
+}
+else
+{ 
+    @Html.Partial("_SetPasswordPartial")
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

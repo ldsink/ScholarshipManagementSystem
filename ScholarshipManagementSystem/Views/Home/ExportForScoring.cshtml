@@ -1,0 +1,153 @@
+﻿@{
+    ViewBag.Title = "班级打分表导出";
+}
+
+@section Scripts {
+    <script type="text/javascript" src="/Scripts/jquery-1.8.2.js"></script>
+    <script type="text/javascript" src="/Scripts/AjaxFileUploader/ajaxfileupload.js"></script>
+     
+    <script type="text/javascript" src="/Scripts/jqGrid/js/i18n/grid.locale-cn.js"></script>
+    <script type="text/javascript" src="/Scripts/jqGrid/js/jquery.jqGrid.min.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="/Scripts/jqGrid/css/ui.jqgrid.css" />
+    <link rel="stylesheet" type="text/css" href="/Scripts/jqGrid/css/start/jquery-ui-1.10.3.custom.css" />
+    <script type="text/javascript" src="/Scripts/jBox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="/Scripts/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+    <link type="text/css" rel="stylesheet" href="/Scripts/jBox/Skins2/Blue/jbox.css"/>
+    
+    <script type="text/javascript">
+        var baseUrl = '@ViewBag.ApiUrl';
+
+        $("#scoring_t").jqGrid({
+            caption: '班级打分表导出',
+            datatype: "json",
+            mtype: 'GET',
+            colNames: ['Id', '打分人学号', '被打分人学号', 'A', 'B', 'C', 'D', 'E', 'F', 'Total', '备注'],
+            colModel: [
+                { name: 'Id', index: 'Id', width: 1, align: "center", sortable: false, hidden: true },
+                { name: 'ScoringStudentInfoId', index: 'ScoringStudentInfoId', width: 60, align: "center", sortable: false },
+                { name: 'ScoredStudentInfoId', index: 'ScoredStudentInfoId', width: 60, align: "center", sortable: false },
+                {
+                    name: 'A', index: 'A', width: 20, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) { return cellvalue.toFixed(1); }
+                },
+                {
+                    name: 'B', index: 'B', width: 20, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) { return cellvalue.toFixed(1); }
+                },
+                {
+                    name: 'C', index: 'C', width: 20, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) { return cellvalue.toFixed(1); }
+                },
+                {
+                    name: 'D', index: 'D', width: 20, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) { return cellvalue.toFixed(1); }
+                },
+                {
+                    name: 'E', index: 'E', width: 20, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) { return cellvalue.toFixed(1); }
+                },
+                {
+                    name: 'F', index: 'F', width: 20, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) { return cellvalue.toFixed(1); }
+                },
+                {
+                    name: 'Total', index: 'Total', width: 30, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) { return cellvalue.toFixed(1); }
+                },
+                { name: 'Notes', index: 'Notes', width: 60, align: "center", sortable: false },
+            ],
+            autowidth: true,
+            height: 600,
+            rowNum: -1, // Set this parameter to -1 (unlimited) to disable this checking.
+            scroll: true,
+            sortname: 'Id',
+            sortorder: "desc",
+            jsonReader: {
+                root: "griddata",
+                total: "totalpages",
+                page: "currpage",
+                records: "totalrecords",
+                repeatitems: false
+            },
+            altclass: 'altRowsColour',
+        });
+
+        $("#search_btn").click(function () {
+            $("#scoring_t").jqGrid('setGridParam', {
+                url: baseUrl + '/?id1=' + $("#id1").val() +
+                    '&id2=' + $("#id2").val(),
+                page: 1
+            }).trigger("reloadGrid");
+        });
+        
+        $("#export_btn").click(function () {
+            $.jBox.messager('正在准备数据，请稍候……', '提示');
+            var exportUrl = baseUrl + '/?method=export&id1=' + $("#id1").val() + '&id2=' + $("#id2").val();
+            $.getJSON(exportUrl, function (data) {
+                $.jBox.messager(data, '提示');
+                window.location.href = "/App_Export/ClassScoring.xlsx";
+            });
+        });
+
+        $("#export_all_btn").click(function () {
+            var submit = function (v, h, f) {
+                if (v == 'ok') {
+                    jBox.tip('正在处理……', 'info');
+                    var exportUrl = '/api/Export/?type=ClassScoring';
+                    $.getJSON(exportUrl, function (data) {
+                        $.jBox.tip(data, 'info');
+                        window.location.href = "/App_Export/ClassScoringAll.xlsx";
+                    });
+                }
+                else if (v == 'cancel')
+                    jBox.tip('您已经取消操作。', 'info');
+                return true; //close
+            };
+
+            $.jBox.confirm("确定需要导出全部班级打分原始数据？<br />（这个操作可能耗费大量时间）", "提示", submit);
+        });
+
+        $("#export_ann_btn").click(function () {
+            var submit = function (v, h, f) {
+                if (v == 'ok') {
+                    jBox.tip('正在处理……', 'info');
+                    var exportUrl = '/api/Export/?type=ClassScoringForAnnounce';
+                    $.getJSON(exportUrl, function (data) {
+                        $.jBox.tip(data, 'info');
+                        window.location.href = "/App_Export/ClassScoringForAnnounce.xlsx";
+                    });
+                }
+                else if (v == 'cancel')
+                    jBox.tip('您已经取消操作。', 'info');
+                return true; //close
+            };
+            $.jBox.confirm("确定需要导出全部班级打分公示数据？<br />（这个操作可能耗费大量时间）", "提示", submit);
+        });
+    </script>
+}
+
+<h2 style="font-family:Microsoft YaHei;text-align:center">班级打分表导出</h2><br />
+
+<div style="font-family:Microsoft YaHei;text-align:center;width: 1000px">
+    <link rel=stylesheet type="text/css" href="../Content/Scoring.css">
+    <table style="font-family:Microsoft YaHei;margin: auto;text-align:center">
+        <tr>
+            <td style="width:100px"><b>&nbsp;打分人学号：</b></td>
+            <td><input id="id1" type="text" style="width: 100px" /></td>
+            <td style="width:150px"><b>&nbsp;被打分人学号：</b></td>
+            <td><input id="id2" type="text" style="width: 100px" /></td>
+            <td><input id="search_btn" class="uploadButton" type="button" value="搜索" /></td>
+            <td>
+                <input id="export_btn" type="button" class="uploadButton" value="导出" />
+                <input id="export_all_btn" type="button" class="uploadButton" value="导出全部原始数据" />
+                <input id="export_ann_btn" type="button" class="uploadButton" value="导出全部公示数据" />
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div>
+    <table id="scoring_t"></table>
+</div>
+
